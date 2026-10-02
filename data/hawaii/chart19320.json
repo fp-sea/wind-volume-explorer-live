@@ -1,0 +1,23 @@
+{
+ "file": "chart19320.jpg",
+ "chart": "19320",
+ "title": "Island of Hawaiʻi",
+ "edition": "last edition (NOAA ended paper and raster chart production; this edition was cancelled in December 2024)",
+ "scale": "1:250,000 at 20°30′",
+ "soundings": "fathoms",
+ "w": 3563,
+ "h": 4096,
+ "xA": 274252.2872440164,
+ "xB": 1750.5533582288572,
+ "yA": 37040.28678736843,
+ "yB": 99697.58592161942,
+ "bounds": {
+  "latMin": 18.597504650364748,
+  "latMax": 20.813433518866777,
+  "lonMin": -156.66605416786288,
+  "lonMax": -154.63055794812902
+ },
+ "fit": {
+  "maxResidualPx": 0.3
+ }
+}

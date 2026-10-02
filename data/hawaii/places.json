@@ -1,0 +1,867 @@
+{
+ "source": "hawaii_alenuihaha_notable_geography_20241106.xlsx",
+ "title": "Notable geography, locations, and navaids for Alenuihaha Channel crossing generally listed in order of location/appearance from start location on Big Island (Honokohau Harbor), north to Nishimura Bay, crossing the Alenuihaha to south Maui (Ahihi Bay), then back across Alenuihaha to Honokohau Harbor.",
+ "corrections": [
+  "FAD \"ZZ\" Māhukona, Hawai‘i: description typo",
+  "Honokōhau Harbor Approach Lighted Buoy 1: island Maui → Big Island (it's at Honokōhau)",
+  "Honokōhau Harbor Entrance Channel Directional Light: island Maui → Big Island (it's at Honokōhau)"
+ ],
+ "resources": [
+  "https://ulukau.org/cgi-bin/hpn?l=en",
+  "https://manomano.io/"
+ ],
+ "places": [
+  {
+   "name": "Hawaiʻi Island (Big Island)",
+   "label": "Hawaiʻi Island",
+   "kind": "island",
+   "key": null,
+   "lat": 19.542915,
+   "lon": -155.665857,
+   "dm": "19° 32.57' N, 155° 39.95' W",
+   "meaning": "Homeland\" or \"Place of the Gods",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Hawaiʻi Island, also called the Big Island, is the largest and youngest island in the Hawaiian archipelago, home to active volcanoes."
+  },
+  {
+   "name": "Kohala (5,480')",
+   "label": "Kohala",
+   "kind": "peak",
+   "key": null,
+   "lat": 20.0859,
+   "lon": -155.7171,
+   "dm": "20° 5.15' N, 155° 43.03' W",
+   "meaning": "Cherished Land",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": 5480,
+   "notes": "Kohala, the oldest and extinct volcano on Hawaiʻi Island"
+  },
+  {
+   "name": "Waimea Valley (2,670')",
+   "label": "Waimea Saddle",
+   "kind": "peak",
+   "key": null,
+   "lat": 20.020644,
+   "lon": -155.662844,
+   "dm": "20° 1.24' N, 155° 39.77' W",
+   "meaning": "Reddish Water",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": 2670,
+   "notes": "Waimea Valley, situated in the uplands of the Kohala region on Hawaiʻi Island, is a windy area due to trade winds funneled through the valley between Kohala and Mauna Kea. These strong winds amplify conditions in the ʻAlenuihāhā Channel."
+  },
+  {
+   "name": "Mauna Kea (13,803′)",
+   "label": "Mauna Kea",
+   "kind": "peak",
+   "key": null,
+   "lat": 19.82061,
+   "lon": -155.468094,
+   "dm": "19° 49.24' N, 155° 28.09' W",
+   "meaning": "White Mountain",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": 13803,
+   "notes": "Tallest peak in Hawaiʻi; significant for cultural importance and astronomical observatories."
+  },
+  {
+   "name": "Humuʻula Saddle (6,632')",
+   "label": "Humuʻula Saddle",
+   "kind": "peak",
+   "key": null,
+   "lat": 19.7014,
+   "lon": -155.4981,
+   "dm": "19° 42.08' N, 155° 29.89' W",
+   "meaning": "The High Valley",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": 6632,
+   "notes": "The Humuʻula Saddle, located between Mauna Kea and Mauna Loa on Hawaiʻi Island, is a high-altitude valley known for its strong trade winds and dramatic weather. These winds, funneled through the Saddle, contribute to the powerful gusts and challenging conditions in the ʻAlenuihāhā Channel."
+  },
+  {
+   "name": "Mauna Loa (13,679′)",
+   "label": "Mauna Loa",
+   "kind": "peak",
+   "key": null,
+   "lat": 19.472139,
+   "lon": -155.592207,
+   "dm": "19° 28.33' N, 155° 35.53' W",
+   "meaning": "Long Mountain",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": 13679,
+   "notes": "World's largest active volcano; dominates the landscape of Hawaiʻi Island."
+  },
+  {
+   "name": "Honokōhau Harbor",
+   "label": "Honokōhau Harbor",
+   "kind": "anchorage",
+   "key": "home port",
+   "lat": 19.669066,
+   "lon": -156.022754,
+   "dm": "19° 40.14' N, 156° 1.37' W",
+   "meaning": "Bay Drawing Dew",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Home port for S/V Solstice and departure for expedition. A well-equipped marina on Hawaiʻi Island's west coast, offering safe anchorage and amenities."
+  },
+  {
+   "name": "WPT: Honokōhau Harbor Approach",
+   "label": "Honokōhau Harbor Approach",
+   "kind": "waypoint",
+   "key": null,
+   "lat": 19.6681,
+   "lon": -156.0306,
+   "dm": "19° 40.09' N, 156° 1.84' W",
+   "meaning": "Bay Drawing Dew",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Navigational point guiding vessels toward Honokōhau Harbor."
+  },
+  {
+   "name": "WPT: Off Pūhili Point",
+   "label": "Off Pūhili Point",
+   "kind": "waypoint",
+   "key": null,
+   "lat": 19.701,
+   "lon": -156.0855,
+   "dm": "19° 42.06' N, 156° 5.13' W",
+   "meaning": "Said to be named for a priest or \"To veer, as the wind",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Position near Pūhili Point; mariners should be aware of variable wind conditions in this area."
+  },
+  {
+   "name": "Keāhole Point and Light (Lat/Lon=Light)",
+   "label": "Keāhole Point Light",
+   "kind": "light",
+   "key": null,
+   "lat": 19.72788,
+   "lon": -156.06108,
+   "dm": "19° 43.67' N, 156° 3.66' W",
+   "meaning": "The āhole fish",
+   "island": "Big Island",
+   "light": "Fl W 6s, range W9; (R sectors from 185 to 343, covers rocks off Makolea and Kaiwi)",
+   "elevFt": null,
+   "notes": "Westernmost point of Hawaiʻi Island, marked by a lighthouse; caution advised due to potential strong currents and tide rips 2 nm north, especially during northeast trade winds."
+  },
+  {
+   "name": "WPT: Off Keāhole Point",
+   "label": "Off Keāhole Point",
+   "kind": "waypoint",
+   "key": null,
+   "lat": 19.728,
+   "lon": -156.0973,
+   "dm": "19° 43.68' N, 156° 5.84' W",
+   "meaning": "The āhole fish",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Offshore reference point near Keāhole Point; monitor for local currents and tidal effects."
+  },
+  {
+   "name": "Keāhole Point Warning Lighted Buoys A-D (Lat/Lon=D, Westernmost Buoy)",
+   "label": "Keāhole warning buoys",
+   "kind": "light",
+   "key": null,
+   "lat": 19.743076,
+   "lon": -156.064697,
+   "dm": "19° 44.58' N, 156° 3.88' W",
+   "meaning": "The āhole fish",
+   "island": "Big Island",
+   "light": "Q W",
+   "elevFt": null,
+   "notes": "Private aids to navigation near Keāhole Point. Their specific purpose is uncertain; mariners should exercise caution in the area."
+  },
+  {
+   "name": "Kona International Airport",
+   "label": "Kona International Airport",
+   "kind": "airport",
+   "key": null,
+   "lat": 19.736916,
+   "lon": -156.042925,
+   "dm": "19° 44.21' N, 156° 2.58' W",
+   "meaning": "Leeward",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Major international airport adjacent to Keāhole Point; be aware of air traffic and restricted zones. Source of weather data."
+  },
+  {
+   "name": "Makoleʻā Point",
+   "label": "Makoleʻā Point",
+   "kind": "point",
+   "key": null,
+   "lat": 19.776152,
+   "lon": -156.052486,
+   "dm": "19° 46.57' N, 156° 3.15' W",
+   "meaning": "Glowing Red Eye",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Shoal area extending 0.7 nm offshore until Kawili Point; maintain a safe distance to avoid breakers which can extend 0.5 nm offsore. Give wide berth of 1.5 nm."
+  },
+  {
+   "name": "Kawili Point",
+   "label": "Kawili Point",
+   "kind": "point",
+   "key": null,
+   "lat": 19.79053,
+   "lon": -156.041389,
+   "dm": "19° 47.43' N, 156° 2.48' W",
+   "meaning": "Twist",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Marks the end of the shoal area from Makoleʻā Point; safer waters beyond this point."
+  },
+  {
+   "name": "WPT: Off Kawili Point",
+   "label": "Off Kawili Point",
+   "kind": "waypoint",
+   "key": null,
+   "lat": 19.7922,
+   "lon": -156.0532,
+   "dm": "19° 47.53' N, 156° 3.19' W",
+   "meaning": "Twist",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Offshore marker indicating passage past Kawili Point; used for safe navigation."
+  },
+  {
+   "name": "Makalawena Beach Anchorage (Base Camp - Low)",
+   "label": "Makalawena Beach Anchorage",
+   "kind": "anchorage",
+   "key": "base camp (low)",
+   "lat": 19.7938,
+   "lon": -156.0312,
+   "dm": "19° 47.63' N, 156° 1.87' W",
+   "meaning": "Release of Glow\" (or \"Mischievious Winds\")",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Potential anchorage near Makalawena Beach; suitable as a rest point before crossing the ʻAlenuihāhā Channel, low/less severe conditions permitting."
+  },
+  {
+   "name": "Kikaua Point",
+   "label": "Kikaua Point",
+   "kind": "point",
+   "key": null,
+   "lat": 19.82188,
+   "lon": -156.00359,
+   "dm": "19° 49.31' N, 156° 0.22' W",
+   "meaning": null,
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Beginning of a shoal area extending 0.5 miles offshore until Mahewalu Point; exercise caution when navigating close to shore."
+  },
+  {
+   "name": "Mahewalu Point",
+   "label": "Mahewalu Point",
+   "kind": "point",
+   "key": null,
+   "lat": 19.838056,
+   "lon": -155.989722,
+   "dm": "19° 50.28' N, 155° 59.38' W",
+   "meaning": null,
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "End of the shoal area from Kikaua Point; navigation becomes safer beyond this point."
+  },
+  {
+   "name": "Fish Aggregating Device (FAD) \"OT Waikōloa, Hawaiʻi\"",
+   "label": "FAD OT",
+   "kind": "fad",
+   "key": null,
+   "lat": 19.876667,
+   "lon": -156.193333,
+   "dm": "19° 52.60' N, 156° 11.60' W",
+   "meaning": "Waters Pulling Far\" or \"Duck Water\", name of wind",
+   "island": "Big Island",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "Fish Aggregating Devices (FAD) located near Waikōloa; attracts pelagic fish species, beneficial for fishing activities. Fish in the north and west Pacific gather under floating objects, and FADs, ranging from advanced buoys with tracking equipment to simple logs, facilitate this. Hawaiian FADs, established by the state, are yellow with a 6-foot base, a 5-foot steel pole with a quick-flashing yellow light, and 12-inch white letters. Since FADs can break loose or lose their lighting, mariners are advised to use caution near them."
+  },
+  {
+   "name": "FAD \"XX\" Puakō, Hawaiʻi",
+   "label": "FAD XX",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.037272,
+   "lon": -156.10349,
+   "dm": "20° 2.24' N, 156° 6.21' W",
+   "meaning": "Sugarcane Blossom",
+   "island": "Big Island",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD situated off Puakō"
+  },
+  {
+   "name": "Kawaihae Harbor and Light (Lat/Lon=Light)",
+   "label": "Kawaihae Harbor Light",
+   "kind": "light",
+   "key": null,
+   "lat": 20.04143,
+   "lon": -155.83286,
+   "dm": "20° 2.49' N, 155° 49.97' W",
+   "meaning": "Water of Wrath",
+   "island": "Big Island",
+   "light": "Fl W 6s, range 9",
+   "elevFt": null,
+   "notes": "Deepwater commercial harbor on Hawaiʻi Island's west coast; equipped with navigational lights for safe entry."
+  },
+  {
+   "name": "FAD \"ZZ\" Māhukona, Hawaiʻi",
+   "label": "FAD ZZ",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.16389,
+   "lon": -155.96389,
+   "dm": "20° 9.83' N, 155° 57.83' W",
+   "meaning": "Leeward Stream",
+   "island": "Big Island",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD near Māhukona."
+  },
+  {
+   "name": "Māhukona Light House",
+   "label": "Māhukona Light",
+   "kind": "light",
+   "key": null,
+   "lat": 20.1803,
+   "lon": -155.90155,
+   "dm": "20° 10.82' N, 155° 54.09' W",
+   "meaning": "Leeward Stream",
+   "island": "Big Island",
+   "light": "Fl W 4s, range 6",
+   "elevFt": null,
+   "notes": "Lighthouse serving the Māhukona area; aids in coastal navigation."
+  },
+  {
+   "name": "Māhukona Harbor",
+   "label": "Māhukona Harbor",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.183792,
+   "lon": -155.901512,
+   "dm": "20° 11.03' N, 155° 54.09' W",
+   "meaning": "Leeward Stream",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Historic harbor on the Kohala Coast; serves as a staging point for channel crossings."
+  },
+  {
+   "name": "Nishimura Bay (Base Camp - High)",
+   "label": "Nishimura Bay",
+   "kind": "anchorage",
+   "key": "base camp (high)",
+   "lat": 20.1896,
+   "lon": -155.9038,
+   "dm": "20° 11.38' N, 155° 54.23' W",
+   "meaning": "Named after a Japanese settler",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Anchorage on the Kohala Coast; used as a base camp for Alenuihaha crossing in high/challenging conditions, located just north of Māhukona Harbor."
+  },
+  {
+   "name": "ʻUpolu Point",
+   "label": "ʻUpolu Point",
+   "kind": "point",
+   "key": null,
+   "lat": 20.269,
+   "lon": -155.8545,
+   "dm": "20° 16.14' N, 155° 51.27' W",
+   "meaning": "Named after Upolu, an island in Samoa (\"Moist\")",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Northernmost point of Hawaiʻi Island; characterized by strong winds and currents; features an airstrip and wind farm."
+  },
+  {
+   "name": "ʻUpolu Airport",
+   "label": "ʻUpolu Airport",
+   "kind": "airport",
+   "key": null,
+   "lat": 20.265048,
+   "lon": -155.857844,
+   "dm": "20° 15.90' N, 155° 51.47' W",
+   "meaning": "Named after Upolu, an island in Samoa (\"Moist\")",
+   "island": "Big Island",
+   "light": null,
+   "elevFt": null,
+   "notes": "Small airstrip near ʻUpolu Point; source of weather data."
+  },
+  {
+   "name": "ʻAlenuihāhā Channel",
+   "label": "ʻAlenuihāhā Channel",
+   "kind": "channel",
+   "key": null,
+   "lat": 20.423916,
+   "lon": -156.042331,
+   "dm": "20° 25.43' N, 156° 2.54' W",
+   "meaning": "Great Billows Smashing",
+   "island": null,
+   "light": null,
+   "elevFt": null,
+   "notes": "Channel between Hawaiʻi Island and Maui; notorious for high winds and large swells due to funneling effects."
+  },
+  {
+   "name": "Maui",
+   "label": "Maui",
+   "kind": "island",
+   "key": null,
+   "lat": 20.798362,
+   "lon": -156.331925,
+   "dm": "20° 47.90' N, 156° 19.92' W",
+   "meaning": "Valley Isle",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Maui, the second-largest island in Hawaiʻi, is known for its diverse landscapes, including the Haleakalā volcano, lush valleys, and dramatic coastlines. The central isthmus connects its eastern and western volcanic regions."
+  },
+  {
+   "name": "Haleakalā (10,023′)",
+   "label": "Haleakalā",
+   "kind": "peak",
+   "key": null,
+   "lat": 20.709692,
+   "lon": -156.253514,
+   "dm": "20° 42.58' N, 156° 15.21' W",
+   "meaning": "House of the Sun",
+   "island": "Maui",
+   "light": null,
+   "elevFt": 10023,
+   "notes": "Maui's highest peak; influences local climate and weather patterns, including those affecting the ʻAlenuihāhā Channel."
+  },
+  {
+   "name": "Hāna Bay",
+   "label": "Hāna Bay",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.759696,
+   "lon": -155.98242,
+   "dm": "20° 45.58' N, 155° 58.95' W",
+   "meaning": null,
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Sheltered bay on Maui's east coast; provides anchorage and is known for its scenic beauty."
+  },
+  {
+   "name": "FAD \"HC1\" Hāna, Maui",
+   "label": "FAD HC1",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.62167,
+   "lon": -155.8716,
+   "dm": "20° 37.30' N, 155° 52.30' W",
+   "meaning": null,
+   "island": "Maui",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD located near Hāna"
+  },
+  {
+   "name": "FAD \"NL\" Nūʻū Landing, Maui",
+   "label": "FAD NL",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.548333,
+   "lon": -156.158333,
+   "dm": "20° 32.90' N, 156° 9.50' W",
+   "meaning": "Height or Crest",
+   "island": "Maui",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD positioned off Nūʻū Landing"
+  },
+  {
+   "name": "FAD \"GG\" Nakaohu Point, Maui",
+   "label": "FAD GG",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.533333,
+   "lon": -156.266667,
+   "dm": "20° 32.00' N, 156° 16.00' W",
+   "meaning": null,
+   "island": "Maui",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD near Nakaohu Point"
+  },
+  {
+   "name": "FAD \"HS\" Hālona Point, Kahoʻolawe",
+   "label": "FAD HS",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.45,
+   "lon": -156.485,
+   "dm": "20° 27.00' N, 156° 29.10' W",
+   "meaning": "Peering Place",
+   "island": "Kahoolawe",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD off Hālona Point"
+  },
+  {
+   "name": "FAD \"JJ\" Kamōhio, Kahoʻolawe",
+   "label": "FAD JJ",
+   "kind": "fad",
+   "key": null,
+   "lat": 20.403333,
+   "lon": -156.633333,
+   "dm": "20° 24.20' N, 156° 38.00' W",
+   "meaning": "Gust of wind\"?",
+   "island": "Kahoolawe",
+   "light": "Fl Y 4s",
+   "elevFt": null,
+   "notes": "FAD situated near Kamōhio"
+  },
+  {
+   "name": "Cape Hanamanioa and Point Light (Lat/Lon=Light)",
+   "label": "Cape Hanamanioa Light",
+   "kind": "light",
+   "key": null,
+   "lat": 20.583332,
+   "lon": -156.412058,
+   "dm": "20° 35.00' N, 156° 24.72' W",
+   "meaning": "Uncertain",
+   "island": "Maui",
+   "light": "Fl W 4s, range 8",
+   "elevFt": null,
+   "notes": "Southwestern tip of Maui, marked by a lighthouse; caution advised due to strong currents."
+  },
+  {
+   "name": "WPT: Off Cape Hanamanioa",
+   "label": "Off Cape Hanamanioa",
+   "kind": "waypoint",
+   "key": null,
+   "lat": 20.5756,
+   "lon": -156.4553,
+   "dm": "20° 34.54' N, 156° 27.32' W",
+   "meaning": "Uncertain",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Offshore navigational point near Cape Hanamanioa; assists in safe passage."
+  },
+  {
+   "name": "Kahoʻolawe Island",
+   "label": "Kahoʻolawe Island",
+   "kind": "island",
+   "key": null,
+   "lat": 20.558047,
+   "lon": -156.605738,
+   "dm": "20° 33.48' N, 156° 36.34' W",
+   "meaning": "The Taking Away by Currents",
+   "island": "Kahoolawe",
+   "light": null,
+   "elevFt": null,
+   "notes": "Uninhabited island with historical significance. Restricted-access island under naval jurisdiction; caution advised due to potential hazards, including unexploded ordnance."
+  },
+  {
+   "name": "Keoneʻuli (Beck) Cove",
+   "label": "Keoneʻuli (Beck) Cove",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.537614,
+   "lon": -156.550668,
+   "dm": "20° 32.26' N, 156° 33.04' W",
+   "meaning": "The Dark Sand",
+   "island": "Kahoolawe",
+   "light": null,
+   "elevFt": null,
+   "notes": "Anchorage on the east side of Kahoʻolawe; offers temporary shelter, located in the southwestern part of Kanapou Bay."
+  },
+  {
+   "name": "ʻAlalakeiki Channel",
+   "label": "ʻAlalakeiki Channel",
+   "kind": "channel",
+   "key": null,
+   "lat": 20.584674,
+   "lon": -156.483653,
+   "dm": "20° 35.08' N, 156° 29.02' W",
+   "meaning": "Channel of the Wailing Child",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Channel between Kahoʻolawe and Maui; strong currents and winds; use caution."
+  },
+  {
+   "name": "La Perouse Bay",
+   "label": "La Perouse Bay",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.593911,
+   "lon": -156.419236,
+   "dm": "20° 35.63' N, 156° 25.15' W",
+   "meaning": "Named after French explorer Jean-François de Galaup, comte de La Pérouse",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Scenic bay named after French explorer; accessible for small craft."
+  },
+  {
+   "name": "ʻĀhihi Bay (Summit)",
+   "label": "ʻĀhihi Bay",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.630618,
+   "lon": -156.4431,
+   "dm": "20° 37.84' N, 156° 26.59' W",
+   "meaning": "Entwined",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Summit anchorage site; popular for nearby snorkeling and diving activities. Nearby Oneloa beach and Pu'u Olai Cinder Cone."
+  },
+  {
+   "name": "Oneloa Beach",
+   "label": "Oneloa Beach",
+   "kind": "coast",
+   "key": null,
+   "lat": 20.629124,
+   "lon": -156.449554,
+   "dm": "20° 37.75' N, 156° 26.97' W",
+   "meaning": "Long Sand",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Long sandy beach; also known as Makena Beach or Big Beach."
+  },
+  {
+   "name": "Puʻu Olai Cinder Cone",
+   "label": "Puʻu Olai Cinder Cone",
+   "kind": "coast",
+   "key": null,
+   "lat": 20.636559,
+   "lon": -156.44929,
+   "dm": "20° 38.19' N, 156° 26.96' W",
+   "meaning": "Earthquake Hill",
+   "island": "Maui",
+   "light": null,
+   "elevFt": null,
+   "notes": "Volcanic cone near Makena; part of geological features of Maui."
+  },
+  {
+   "name": "Molokini Islet Crater and Light (Lat/Lon=Light)",
+   "label": "Molokini Light",
+   "kind": "light",
+   "key": null,
+   "lat": 20.630568,
+   "lon": -156.497489,
+   "dm": "20° 37.83' N, 156° 29.85' W",
+   "meaning": "Many Ties",
+   "island": "Maui",
+   "light": "Fl W 2.5s, range 6",
+   "elevFt": null,
+   "notes": "Islet with a navigational light; popular for diving and calm anchorage conditions."
+  },
+  {
+   "name": "Honokanaiʻa Cove",
+   "label": "Honokanaiʻa Cove",
+   "kind": "anchorage",
+   "key": null,
+   "lat": 20.512871,
+   "lon": -156.68686,
+   "dm": "20° 30.77' N, 156° 41.21' W",
+   "meaning": "Bay of the Dolphin",
+   "island": "Kahoolawe",
+   "light": null,
+   "elevFt": null,
+   "notes": "\"Best\" anchorage on Kahoʻolawe; calm except in west or south weather."
+  },
+  {
+   "name": "Honokōhau Harbor Approach Lighted Buoy 1",
+   "label": "Honokōhau Buoy 1",
+   "kind": "light",
+   "key": null,
+   "lat": 19.66845,
+   "lon": -156.03051,
+   "dm": "19° 40.11' N, 156° 1.83' W",
+   "meaning": "Bay Drawing Dew",
+   "island": "Big Island",
+   "light": "Fl G 2.5s, range 3",
+   "elevFt": null,
+   "notes": "Navigational buoy marking approach to Honokōhau Harbor."
+  },
+  {
+   "name": "Honokōhau Harbor Entrance Channel Directional Light",
+   "label": "Honokōhau entrance light",
+   "kind": "light",
+   "key": null,
+   "lat": 19.66997,
+   "lon": -156.02604,
+   "dm": "19° 40.20' N, 156° 1.56' W",
+   "meaning": "Bay Drawing Dew",
+   "island": "Big Island",
+   "light": "Iso W 6s, range W8; (R and G Sectors)",
+   "elevFt": null,
+   "notes": "Light guiding vessels into Honokōhau Harbor safely."
+  }
+ ],
+ "routes": [
+  {
+   "id": "alenuihaha-expedition",
+   "label": "ʻAlenuihāhā expedition route (option)",
+   "note": "One option: Honokōhau north to the base camps, then from Nishimura Bay across the channel and back. The turnaround is on the channel's throat line (ʻUpolu Point across to Kīpahulu, its narrowest crossing), 1 nm short of Maui's coast. The route ends at Nishimura; the way home to Honokōhau retraces legs 1 and 2. Straight legs; not a plan, and not for navigation.",
+   "legs": [
+    {
+     "name": "Honokōhau to base camp (low)",
+     "points": [
+      {
+       "label": "Honokōhau Harbor",
+       "lat": 19.669066,
+       "lon": -156.022754
+      },
+      {
+       "label": "Honokōhau Harbor Approach",
+       "lat": 19.6681,
+       "lon": -156.0306
+      },
+      {
+       "label": "Off Pūhili Point",
+       "lat": 19.701,
+       "lon": -156.0855
+      },
+      {
+       "label": "Off Keāhole Point",
+       "lat": 19.728,
+       "lon": -156.0973
+      },
+      {
+       "label": "Off Kawili Point",
+       "lat": 19.7922,
+       "lon": -156.0532
+      },
+      {
+       "label": "Makalawena Beach Anchorage",
+       "lat": 19.7938,
+       "lon": -156.0312
+      }
+     ],
+     "segments": [
+      {
+       "from": "Honokōhau Harbor",
+       "to": "Honokōhau Harbor Approach",
+       "nm": 0.4,
+       "brgT": 263
+      },
+      {
+       "from": "Honokōhau Harbor Approach",
+       "to": "Off Pūhili Point",
+       "nm": 3.7,
+       "brgT": 302
+      },
+      {
+       "from": "Off Pūhili Point",
+       "to": "Off Keāhole Point",
+       "nm": 1.8,
+       "brgT": 338
+      },
+      {
+       "from": "Off Keāhole Point",
+       "to": "Off Kawili Point",
+       "nm": 4.6,
+       "brgT": 33
+      },
+      {
+       "from": "Off Kawili Point",
+       "to": "Makalawena Beach Anchorage",
+       "nm": 1.2,
+       "brgT": 86
+      }
+     ],
+     "nm": 11.7
+    },
+    {
+     "name": "Up the Kohala coast to base camp (high)",
+     "points": [
+      {
+       "label": "Makalawena Beach Anchorage",
+       "lat": 19.7938,
+       "lon": -156.0312
+      },
+      {
+       "label": "Nishimura Bay",
+       "lat": 20.1896,
+       "lon": -155.9038
+      }
+     ],
+     "segments": [
+      {
+       "from": "Makalawena Beach Anchorage",
+       "to": "Nishimura Bay",
+       "nm": 24.8,
+       "brgT": 17
+      }
+     ],
+     "nm": 24.8
+    },
+    {
+     "name": "Across toward Kīpahulu",
+     "points": [
+      {
+       "label": "Nishimura Bay",
+       "lat": 20.1896,
+       "lon": -155.9038
+      },
+      {
+       "label": "Turnaround off Kīpahulu",
+       "lat": 20.63557,
+       "lon": -156.04124,
+       "computed": true
+      }
+     ],
+     "segments": [
+      {
+       "from": "Nishimura Bay",
+       "to": "Turnaround off Kīpahulu",
+       "nm": 27.9,
+       "brgT": 344
+      }
+     ],
+     "nm": 27.9
+    },
+    {
+     "name": "Back to Nishimura",
+     "points": [
+      {
+       "label": "Turnaround off Kīpahulu",
+       "lat": 20.63557,
+       "lon": -156.04124,
+       "computed": true
+      },
+      {
+       "label": "Nishimura Bay",
+       "lat": 20.1896,
+       "lon": -155.9038
+      }
+     ],
+     "segments": [
+      {
+       "from": "Turnaround off Kīpahulu",
+       "to": "Nishimura Bay",
+       "nm": 27.9,
+       "brgT": 164
+      }
+     ],
+     "nm": 27.9
+    }
+   ],
+   "nm": 92.3
+  }
+ ]
+}

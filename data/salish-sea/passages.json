@@ -1,0 +1,332 @@
+{
+ "note": "Quick-route places for the passage planner: harbours, marinas and anchorages (a point on the water at or off each), vias (a point to pass), and cuts (channels narrower than the 200 m routing mask, opened along these lines). Approximate positions: planning, not navigation.",
+ "places": [
+  {
+   "name": "Anacortes (Cap Sante Marina)",
+   "lat": 48.512,
+   "lon": -122.604
+  },
+  {
+   "name": "Bellingham (Squalicum Harbor)",
+   "lat": 48.755,
+   "lon": -122.502
+  },
+  {
+   "name": "Blaine (Drayton Harbor)",
+   "lat": 48.993,
+   "lon": -122.76
+  },
+  {
+   "name": "Blake Island",
+   "lat": 47.542,
+   "lon": -122.491
+  },
+  {
+   "name": "Bremerton",
+   "lat": 47.563,
+   "lon": -122.625
+  },
+  {
+   "name": "Coupeville (Penn Cove)",
+   "lat": 48.222,
+   "lon": -122.689
+  },
+  {
+   "name": "Deer Harbor (Orcas)",
+   "lat": 48.617,
+   "lon": -123.002
+  },
+  {
+   "name": "Des Moines",
+   "lat": 47.401,
+   "lon": -122.332
+  },
+  {
+   "name": "Eagle Harbor (Winslow)",
+   "lat": 47.62,
+   "lon": -122.508
+  },
+  {
+   "name": "Edmonds",
+   "lat": 47.812,
+   "lon": -122.391
+  },
+  {
+   "name": "Everett",
+   "lat": 48.001,
+   "lon": -122.222
+  },
+  {
+   "name": "Friday Harbor",
+   "lat": 48.537,
+   "lon": -123.011
+  },
+  {
+   "name": "Gig Harbor",
+   "lat": 47.329,
+   "lon": -122.581
+  },
+  {
+   "name": "Kingston",
+   "lat": 47.796,
+   "lon": -122.496
+  },
+  {
+   "name": "Langley",
+   "lat": 48.041,
+   "lon": -122.404
+  },
+  {
+   "name": "Neah Bay",
+   "lat": 48.372,
+   "lon": -124.611
+  },
+  {
+   "name": "Oak Harbor",
+   "lat": 48.284,
+   "lon": -122.636
+  },
+  {
+   "name": "Olympia",
+   "lat": 47.062,
+   "lon": -122.901
+  },
+  {
+   "name": "Pleasant Harbor (Hood Canal)",
+   "lat": 47.664,
+   "lon": -122.914
+  },
+  {
+   "name": "Port Angeles",
+   "lat": 48.124,
+   "lon": -123.441
+  },
+  {
+   "name": "Port Gamble",
+   "lat": 47.856,
+   "lon": -122.584
+  },
+  {
+   "name": "Port Ludlow",
+   "lat": 47.925,
+   "lon": -122.686
+  },
+  {
+   "name": "Port Madison",
+   "lat": 47.705,
+   "lon": -122.528
+  },
+  {
+   "name": "Port Orchard",
+   "lat": 47.543,
+   "lon": -122.636
+  },
+  {
+   "name": "Port Townsend (Point Hudson)",
+   "lat": 48.117,
+   "lon": -122.751
+  },
+  {
+   "name": "Poulsbo",
+   "lat": 47.733,
+   "lon": -122.645
+  },
+  {
+   "name": "Quartermaster Harbor (Vashon)",
+   "lat": 47.391,
+   "lon": -122.462
+  },
+  {
+   "name": "Roche Harbor",
+   "lat": 48.609,
+   "lon": -123.157
+  },
+  {
+   "name": "Rosario (Cascade Bay, Orcas)",
+   "lat": 48.645,
+   "lon": -122.872
+  },
+  {
+   "name": "Seattle (Elliott Bay Marina)",
+   "lat": 47.629,
+   "lon": -122.394
+  },
+  {
+   "name": "Sequim Bay State Park",
+   "lat": 48.041,
+   "lon": -123.026
+  },
+  {
+   "name": "Shilshole Bay Marina",
+   "lat": 47.68,
+   "lon": -122.41
+  },
+  {
+   "name": "Sidney BC (Port Sidney)",
+   "lat": 48.652,
+   "lon": -123.393
+  },
+  {
+   "name": "Stuart Island (Prevost Harbor)",
+   "lat": 48.684,
+   "lon": -123.198
+  },
+  {
+   "name": "Sucia Island (Fossil Bay)",
+   "lat": 48.749,
+   "lon": -122.899
+  },
+  {
+   "name": "Tacoma (Commencement Bay)",
+   "lat": 47.283,
+   "lon": -122.442
+  },
+  {
+   "name": "Victoria BC (Inner Harbour)",
+   "lat": 48.422,
+   "lon": -123.372
+  },
+  {
+   "name": "Watmough Bay (Lopez)",
+   "lat": 48.431,
+   "lon": -122.805
+  },
+  {
+   "name": "La Conner (Swinomish Channel)",
+   "lat": 48.392,
+   "lon": -122.497
+  }
+ ],
+ "vias": [
+  {
+   "name": "Admiralty Inlet (off Bush Point)",
+   "lat": 48.03,
+   "lon": -122.63
+  },
+  {
+   "name": "Admiralty Inlet (off Marrowstone Point)",
+   "lat": 48.1,
+   "lon": -122.67
+  },
+  {
+   "name": "Agate Passage",
+   "lat": 47.715,
+   "lon": -122.567
+  },
+  {
+   "name": "Cattle Pass",
+   "lat": 48.455,
+   "lon": -122.96
+  },
+  {
+   "name": "Colvos Passage (west of Vashon)",
+   "lat": 47.43,
+   "lon": -122.53
+  },
+  {
+   "name": "Deception Pass",
+   "lat": 48.406,
+   "lon": -122.646
+  },
+  {
+   "name": "East Passage (east of Vashon)",
+   "lat": 47.4,
+   "lon": -122.38
+  },
+  {
+   "name": "Harney Channel",
+   "lat": 48.585,
+   "lon": -122.9
+  },
+  {
+   "name": "Haro Strait",
+   "lat": 48.55,
+   "lon": -123.22
+  },
+  {
+   "name": "Point No Point",
+   "lat": 47.915,
+   "lon": -122.52
+  },
+  {
+   "name": "Port Townsend Canal",
+   "lat": 48.03,
+   "lon": -122.733
+  },
+  {
+   "name": "Rich Passage",
+   "lat": 47.59,
+   "lon": -122.54
+  },
+  {
+   "name": "Rosario Strait",
+   "lat": 48.55,
+   "lon": -122.75
+  },
+  {
+   "name": "San Juan Channel",
+   "lat": 48.5,
+   "lon": -122.97
+  },
+  {
+   "name": "Strait of Juan de Fuca (mid)",
+   "lat": 48.25,
+   "lon": -123.2
+  },
+  {
+   "name": "Tacoma Narrows",
+   "lat": 47.27,
+   "lon": -122.55
+  },
+  {
+   "name": "Thatcher Pass",
+   "lat": 48.526,
+   "lon": -122.8
+  },
+  {
+   "name": "Swinomish Channel (La Conner)",
+   "lat": 48.392,
+   "lon": -122.497
+  }
+ ],
+ "cuts": [
+  {
+   "name": "Port Townsend Canal",
+   "pts": [
+    [
+     48.0205,
+     -122.727
+    ],
+    [
+     48.0265,
+     -122.7305
+    ],
+    [
+     48.0315,
+     -122.7335
+    ],
+    [
+     48.0375,
+     -122.737
+    ]
+   ]
+  },
+  {
+   "name": "Deception Pass",
+   "pts": [
+    [
+     48.403,
+     -122.637
+    ],
+    [
+     48.4062,
+     -122.646
+    ],
+    [
+     48.4085,
+     -122.6555
+    ]
+   ]
+  }
+ ]
+}

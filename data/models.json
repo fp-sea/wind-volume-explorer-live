@@ -1,0 +1,513 @@
+{
+  "_comment": [
+    "Model registry (PROJECT_BRIEF.md 4.2). Everything marked 'verified' was observed on the real bucket. Entries not yet probed say so, and the client treats them as unavailable.",
+    "Paths: {ymd} = YYYYMMDD, {hh} = cycle hour (2 digits), {f3} / {f2} = forecast hour (3 / 2 digits), {kind} = the REFS product (mean | sprd | prob | avrg | eas).",
+    "cycles: the cycle hours that exist, with the forecast length each one reaches. Code must still check that the file exists (brief 4.5); this is the plan, not a promise.",
+    "latencyMin: roughly how long after cycle time f000 appears. Used to decide 'stale' and to avoid probing cycles that can't exist yet."
+  ],
+  "models": [
+    {
+      "id": "hrrr-conus",
+      "label": "HRRR · full column (GRIB, ~50 MB an hour viewed)",
+      "family": "hrrr",
+      "region": "salish-sea",
+      "source": "live",
+      "verified": "2026-09-27: AWS noaa-hrrr-bdp-pds listed, CORS open incl. Range, .idx read; Lambert 3.30 1799x1059, packing 5.3, winds grid-relative",
+      "base": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com",
+      "path": "hrrr.{ymd}/conus/hrrr.t{hh}z.wrfprsf{f2}.grib2",
+      "path2d": "hrrr.{ymd}/conus/hrrr.t{hh}z.wrfsfcf{f2}.grib2",
+      "pathNat": "hrrr.{ymd}/conus/hrrr.t{hh}z.wrfnatf{f2}.grib2",
+      "tke": { "levels": 16, "aglM": [10.4, 38.6, 87.8, 168.9, 287.1, 441.3, 626.7, 837.5, 1073.9, 1342.8, 1649.2, 1996.7, 2389.1, 2831.9, 3332.9, 3900.2], "note": "Model turbulent kinetic energy (MYNN) on native levels 1-16 (to ~3.9 km). Heights above ground are the Salish Sea medians from config/hrrr_hybrid_agl.json (scripts/hrrr_hybrid_heights.mjs), within ~5% of the actual level heights below 2 km." },
+      "grid": {
+        "template": "3.30 Lambert conformal",
+        "ni": 1799,
+        "nj": 1059,
+        "dxKm": 3,
+        "packing": "5.3",
+        "crop": "115 x 116 cells over the Salish Sea"
+      },
+      "cycles": [
+        {
+          "hours": [
+            0,
+            6,
+            12,
+            18
+          ],
+          "maxFhr": 48,
+          "tier": "extended"
+        },
+        {
+          "hours": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "maxFhr": 18,
+          "tier": "rapid"
+        }
+      ],
+      "latencyMin": 60,
+      "levelsAllMb": [
+        1000,
+        975,
+        950,
+        925,
+        900,
+        875,
+        850,
+        825,
+        800,
+        775,
+        750,
+        725,
+        700,
+        675,
+        650,
+        625,
+        600,
+        575,
+        550,
+        525,
+        500,
+        475,
+        450,
+        425,
+        400,
+        375,
+        350,
+        325,
+        300
+      ],
+      "defaultTopMb": "500/50",
+      "columnTops": [
+        {
+          "mb": "500/50",
+          "label": "to 500 mb, every 50 mb · ≈ 50 MB an hour (default)"
+        },
+        {
+          "mb": "500/25",
+          "label": "to 500 mb, every 25 mb · ≈ 75 MB an hour"
+        },
+        {
+          "mb": "300/25",
+          "label": "to 300 mb, every 25 mb · ≈ 130 MB an hour"
+        }
+      ],
+      "packFields": {
+        "HGT": "HGT",
+        "TMP": "TMP",
+        "RH": "RH",
+        "UGRD": "UGRD",
+        "VGRD": "VGRD",
+        "W": "VVEL",
+        "ABSV": "ABSV"
+      },
+      "packSurface": [
+        "HGT:surface",
+        "LAND:surface",
+        "HPBL:surface",
+        "GUST:surface",
+        "FRICV:surface",
+        "TMP:2 m above ground",
+        "RH:2 m above ground",
+        "TMP:surface",
+        "UGRD:10 m above ground",
+        "VGRD:10 m above ground",
+        "UGRD:80 m above ground",
+        "VGRD:80 m above ground"
+      ],
+      "notes": "wrfprs has VVEL (ω), converted to w in the page. wrfsfc has only 10 m and 80 m winds above ground. Winds are grid-relative, turned to true north. Packs (pipeline/packs/build.py) remain available for a scheduled job later.",
+      "liveNote": "radar-explorer's approach (web/model/hrrrgrib.js there) for the whole column: each field and level is one range request for the whole-CONUS message (~0.6-0.9 MB), decoded in workers and cropped. Measured 2026-09-27: 77 messages (every 50 mb to 500 mb) = 49 MB, ~7 s; 203 messages (every 25 mb to 300 mb) = 131 MB, ~15 s.",
+      "prefetchHours": 3,
+      "jitNote": "Just in time: every hour loads the core set (surface, 10/80 m winds, wind + height 1000-850 mb, ≈ 15 MB); other fields and levels load when a display needs them.",
+      "pathSubh": "hrrr.{ymd}/conus/hrrr.t{hh}z.wrfsubhf{f2}.grib2",
+      "subhMaxFhr": 18,
+      "subhNote": "15-minute 10 m wind and gust for the first 18 h (file fFF: steps at (FF-1)h+15/30/45 min and FF h; the top of the hour comes from the hourly data). Verified 2026-09-27 on the real .idx.",
+      "mslpKey": "MSLMA:mean sea level",
+      "short": "HRRR",
+      "iceField": "CIMIXR"
+    },
+    {
+      "id": "hrrr-zarr",
+      "preferred": "the default for the Salish Sea (2026-09-29, owner): the whole run in ~45 MB; the full-column GRIB HRRR is offered when something on screen needs it",
+      "label": "HRRR · light (Zarr, ~45 MB a whole run; 5 levels)",
+      "family": "hrrr",
+      "region": "salish-sea",
+      "source": "hrrrzarr",
+      "verified": "2026-09-27: s3://hrrrzarr sfc/<day>/<day>_<HH>z_fcst.zarr listed; CORS open; chunks [T,150,150] float32 Blosc/LZ4 (~1-1.5 MB per variable-tile for a 48 h run); forecast_period array gives the hours",
+      "base": "https://hrrrzarr.s3.amazonaws.com",
+      "cycles": [
+        {
+          "hours": [
+            0,
+            6,
+            12,
+            18
+          ],
+          "maxFhr": 48,
+          "tier": "extended"
+        },
+        {
+          "hours": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "maxFhr": 18,
+          "tier": "rapid"
+        }
+      ],
+      "latencyMin": 90,
+      "levelsAllMb": [
+        1000,
+        925,
+        850,
+        700,
+        500
+      ],
+      "defaultTopMb": 500,
+      "columnTops": [
+        {
+          "mb": 500,
+          "label": "to ≈ 5.8 km (500 mb): all this source has"
+        }
+      ],
+      "noInversion": "HRRR's Zarr forecast has only 925, 850 and 700 mb in the 950-600 mb search band: too coarse to resolve a capping inversion. Use RRFS for that.",
+      "zarrNote": "Coarse column from the Utah Zarr (HRRR's surface file): winds at 10 m, 80 m and 1000/925/850/700/500 mb; RH from T and dewpoint; 925 mb height by the hypsometric equation; vorticity computed from the winds; w only at 700 mb. One download per run (all hours), then playback is instant.",
+      "firstHour": 1,
+      "prefetchHours": 0,
+      "short": "HRRR (Utah Zarr copy)"
+    },
+    {
+      "id": "rrfs-hi",
+      "label": "RRFS (deterministic) · Hawaiʻi 2.5 km",
+      "family": "rrfs",
+      "region": "hawaii",
+      "verified": "2026-09-27: listed noaa-rrfs-ops-pds, read .idx, decoded messages matching ecCodes, and fetched cross-origin with Range from a browser",
+      "base": "https://noaa-rrfs-ops-pds.s3.amazonaws.com",
+      "path": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.prslev.2p5km.f{f3}.hi.grib2",
+      "path2d": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.2dfld.2p5km.f{f3}.hi.grib2",
+      "grid": {
+        "template": "3.10 Mercator",
+        "ni": 321,
+        "nj": 225,
+        "dxKm": 2.5,
+        "packing": "5.3"
+      },
+      "cycles": [
+        {
+          "hours": [
+            0,
+            6,
+            12,
+            18
+          ],
+          "maxFhr": 84,
+          "tier": "extended"
+        },
+        {
+          "hours": [
+            3,
+            9,
+            15,
+            21
+          ],
+          "maxFhr": 18,
+          "tier": "rapid"
+        }
+      ],
+      "latencyMin": 75,
+      "levelsNote": "prslev has 45 isobaric levels: 1000-100 mb every 25 mb, then 70, 50, 30, 20, 10, 7, 5, 2. The explorer loads 1000 mb up to a chosen column top (default 300 mb ≈ 9 km).",
+      "fields": {
+        "HGT": "geopotential height, gpm",
+        "TMP": "temperature, K",
+        "RH": "relative humidity, %",
+        "UGRD": "u wind (grid-relative on Mercator = true east), m/s",
+        "VGRD": "v wind, m/s",
+        "DZDT": "vertical velocity w, m/s (geometric; NOT ω, no conversion needed)",
+        "ABSV": "absolute vorticity, 1/s (relative = ABSV − f)"
+      },
+      "notes": "Not in prslev: HPBL (PBL height). Check 2dfld before assuming. On a Mercator grid, grid-relative winds are true east/north, so they need no rotation (unlike HRRR's Lambert grid).",
+      "levelsAllMb": [
+        1000,
+        975,
+        950,
+        925,
+        900,
+        875,
+        850,
+        825,
+        800,
+        775,
+        750,
+        725,
+        700,
+        675,
+        650,
+        625,
+        600,
+        575,
+        550,
+        525,
+        500,
+        475,
+        450,
+        425,
+        400,
+        375,
+        350,
+        325,
+        300,
+        275,
+        250,
+        225,
+        200,
+        175,
+        150,
+        125,
+        100,
+        70,
+        50,
+        30,
+        20,
+        10,
+        7,
+        5,
+        2
+      ],
+      "defaultTopMb": 300,
+      "columnTops": [
+        {
+          "mb": 500,
+          "label": "to ≈ 5.8 km (500 mb)"
+        },
+        {
+          "mb": 300,
+          "label": "to ≈ 9 km (300 mb, default)"
+        },
+        {
+          "mb": 100,
+          "label": "to ≈ 16 km (100 mb)"
+        },
+        {
+          "mb": 2,
+          "label": "all 45 levels (to 2 mb)"
+        }
+      ],
+      "forecastWindowH": 48,
+      "prefetchHours": 3,
+      "pathSubh": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.2dfld.2p5km.subh.f{f3}.hi.grib2",
+      "subhMaxFhr": 18,
+      "subhNote": "15-minute 10 m wind and gust for the first 18 h (file fFF: steps at (FF-1)h+15/30/45 min and FF h; the top of the hour comes from the hourly data). Verified 2026-09-27 on the real .idx.",
+      "mslpKey": "MSLET:mean sea level",
+      "short": "RRFS Hawaiʻi",
+      "iceField": "ICMR"
+    },
+    {
+      "id": "refs-hi",
+      "label": "REFS ensemble · Hawaiʻi (mean + spread)",
+      "family": "refs",
+      "region": "hawaii",
+      "verified": "2026-09-27: listed noaa-rrfs-ops-pds and read the mean/sprd/prob .idx files",
+      "base": "https://noaa-rrfs-ops-pds.s3.amazonaws.com",
+      "path": "refs.{ymd}/{hh}/ensprod/refs.t{hh}z.{kind}.f{f2}.hi.grib2",
+      "cycles": [
+        {
+          "hours": [
+            0,
+            6,
+            12,
+            18
+          ],
+          "maxFhr": 60,
+          "minFhr": 1,
+          "tier": "extended"
+        }
+      ],
+      "latencyMin": 120,
+      "levelsMb": [
+        925,
+        850,
+        700,
+        550,
+        500,
+        250
+      ],
+      "fields": {
+        "UGRD": "mean / spread at 10 m and 925, 850, 700, 550, 500, 250 mb",
+        "VGRD": "as UGRD",
+        "WIND": "mean speed at 10 m, 80 m, 925, 850, 550, 250 mb. Read it, don't derive it: averaging member vectors cancels disagreement (salish-sea-briefing)",
+        "TMP": "925, 850, 700, 500, 250 mb only",
+        "RH": "700 mb only",
+        "DZDT": "700 mb only"
+      },
+      "notes": "Too few levels for inversion detection. That comes from deterministic RRFS only. Publishes mean and spread, never individual members (brief 4.7). REFS moves to prod paths on 2026-10-14 on NOMADS; watch whether the ops bucket paths change too.",
+      "short": "REFS"
+    },
+    {
+      "id": "rrfs-conus",
+      "label": "RRFS · 3 km (live in the browser, 3-hourly runs)",
+      "family": "rrfs",
+      "region": "salish-sea",
+      "source": "live",
+      "verified": "2026-09-27: ops bucket listed (prslev/2dfld 3km conus), .idx read; Lambert 3.30 1799x1059 same grid as HRRR, packing 5.3, winds grid-relative",
+      "base": "https://noaa-rrfs-ops-pds.s3.amazonaws.com",
+      "path": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.prslev.3km.f{f3}.conus.grib2",
+      "path2d": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.2dfld.3km.f{f3}.conus.grib2",
+      "grid": {
+        "template": "3.30 Lambert conformal",
+        "ni": 1799,
+        "nj": 1059,
+        "dxKm": 3,
+        "packing": "5.3"
+      },
+      "cycles": [
+        {
+          "hours": [
+            0,
+            6,
+            12,
+            18
+          ],
+          "maxFhr": 84,
+          "tier": "extended"
+        },
+        {
+          "hours": [
+            3,
+            9,
+            15,
+            21
+          ],
+          "maxFhr": 18,
+          "tier": "rapid"
+        }
+      ],
+      "cadenceNote": "Measured 2026-09-26/27: on the public bucket RRFS CONUS runs every 3 h like Hawaiʻi (not hourly). Hourly updating in the Salish Sea comes from HRRR.",
+      "latencyMin": 75,
+      "levelsAllMb": [
+        1000,
+        975,
+        950,
+        925,
+        900,
+        875,
+        850,
+        825,
+        800,
+        775,
+        750,
+        725,
+        700,
+        675,
+        650,
+        625,
+        600,
+        575,
+        550,
+        525,
+        500,
+        475,
+        450,
+        425,
+        400,
+        375,
+        350,
+        325,
+        300
+      ],
+      "defaultTopMb": "500/50",
+      "columnTops": [
+        {
+          "mb": "500/50",
+          "label": "to 500 mb, every 50 mb · ≈ 110 MB an hour (default)"
+        },
+        {
+          "mb": "500/25",
+          "label": "to 500 mb, every 25 mb · ≈ 170 MB an hour"
+        },
+        {
+          "mb": "300/25",
+          "label": "to 300 mb, every 25 mb · ≈ 240 MB an hour"
+        }
+      ],
+      "packFields": {
+        "HGT": "HGT",
+        "TMP": "TMP",
+        "RH": "RH",
+        "UGRD": "UGRD",
+        "VGRD": "VGRD",
+        "W": "DZDT",
+        "ABSV": "ABSV"
+      },
+      "packSurface": [
+        "HGT:surface",
+        "LAND:surface",
+        "HPBL:surface",
+        "GUST:surface",
+        "FRICV:surface",
+        "TMP:2 m above ground",
+        "RH:2 m above ground",
+        "TMP:surface",
+        "UGRD:10 m above ground",
+        "VGRD:10 m above ground",
+        "UGRD:30 m above ground",
+        "VGRD:30 m above ground",
+        "UGRD:50 m above ground",
+        "VGRD:50 m above ground",
+        "UGRD:80 m above ground",
+        "VGRD:80 m above ground",
+        "UGRD:100 m above ground",
+        "VGRD:100 m above ground",
+        "UGRD:160 m above ground",
+        "VGRD:160 m above ground",
+        "UGRD:320 m above ground",
+        "VGRD:320 m above ground"
+      ],
+      "notes": "Served as packs for the same reason as HRRR (CONUS messages can't be cropped by byte range).",
+      "liveNote": "CONUS messages can't be cropped by byte range, so each forecast hour downloads whole-CONUS messages: measured 2026-09-27 in a browser, 55 messages = 63 MB in 4.4 s + 2.6 s decode. The live column is every 50 mb (11 levels to 500 mb, all 7 fields) plus the surface/above-ground set: ~110 MB and ~12 s an hour on a fast connection. Fine for looking at a few hours on a desktop; not for smooth playback or phones (packs would be).",
+      "prefetchHours": 2,
+      "pathSubh": "rrfs.{ymd}/{hh}/rrfs.t{hh}z.2dfld.3km.subh.f{f3}.conus.grib2",
+      "subhMaxFhr": 18,
+      "subhNote": "15-minute 10 m wind and gust for the first 18 h (file fFF: steps at (FF-1)h+15/30/45 min and FF h; the top of the hour comes from the hourly data). Verified 2026-09-27 on the real .idx.",
+      "mslpKey": "MSLET:mean sea level",
+      "short": "RRFS",
+      "iceField": "ICMR"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+ "region": "salish-sea",
+ "terrain": {
+  "file": "terrain.i16.gz",
+  "mask": "land.u8.gz",
+  "coast": "coast.i16.gz",
+  "coastUnits": "10 m",
+  "coastBandKm": 2.0,
+  "units": "m",
+  "x0": -137.6685,
+  "y0": -138.2175,
+  "dxy": 0.5,
+  "nx": 552,
+  "ny": 554,
+  "max_m": 4313,
+  "min_m": -2063,
+  "land_frac": 0.6423,
+  "credit": "Terrain: AWS Terrain Tiles (Terrarium; SRTM, GMTED, ETOPO1 and others). Coastline: GSHHG (Wessel & Smith)."
+ },
+ "photo": {
+  "file": "photo.jpg",
+  "extent": [
+   -137.66848615705717,
+   -138.2175,
+   137.66848615705823,
+   138.2175
+  ],
+  "credit": "Sentinel-2 cloudless 2024 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024), CC BY-NC-SA 4.0"
+ },
+ "lines": {
+  "file": "lines.json",
+  "credit": "Roads and waterways \u00a9 OpenStreetMap contributors (ODbL)"
+ },
+ "chart": {
+  "file": "chart.json",
+  "bands": [
+   "coastal",
+   "harbour"
+  ],
+  "credit": "Chart data: NOAA ENC (ENC Direct to GIS), not for navigation"
+ },
+ "fetch": {
+  "file": "fetch.u16.gz",
+  "units": "0.1 km",
+  "ndir": 16,
+  "dirs": "from-direction, 0 = north, clockwise",
+  "x0": -137.6685,
+  "y0": -138.2175,
+  "dxy": 1.0,
+  "nx": 276,
+  "ny": 277,
+  "openExtraKm": 300.0,
+  "capKm": 600.0,
+  "note": "open water beyond the grid: distance to the edge + openExtraKm, capped"
+ }
+}

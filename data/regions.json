@@ -1,0 +1,828 @@
+{
+  "_comment": [
+    "Region registry (PROJECT_BRIEF.md 4.1). Read by the Python pipeline and, unchanged, by the client.",
+    "Coordinates are decimal degrees, WGS84, west longitudes negative. Distances are km.",
+    "A REGION is one domain: one model data crop (bbox), fetched once, and one north-up 3D scene covering that crop. It holds the models, stations and zone forecasts.",
+    "A SUBAREA is a named part of a region's water. The camera jumps to it and summaries are computed over it. 'box' is its water box, taken from the matching briefing site so the two sites agree.",
+    "A subarea MAY have an 'axis' when channelled flow makes along/across cross-sections meaningful. Its origin is the throat midpoint; +along points toward downstreamBearingDeg and +across to the right of downstream. 'viewBox' is its channel-aligned close-up, in along/across km.",
+    "axis.* values come from pipeline/geometry/strait_axis.py. Check them with python -m pipeline.regions (it re-measures and fails on drift). Don't edit them by hand.",
+    "Stations: 'source' records where each coordinate came from; 'approx' means it was rounded at the source. Radar sites are listed for VAD wind profiles only. This project has no radar visualization."
+  ],
+  "regions": [
+    {
+      "id": "hawaii",
+      "label": "Maui – Hawaiʻi Island",
+      "enabled": true,
+      "tz": "Pacific/Honolulu",
+      "bbox": {
+        "latMin": 18.6,
+        "latMax": 21.3,
+        "lonMin": -157.6,
+        "lonMax": -154.5
+      },
+      "bboxSource": "alenuihaha_wx config/channel_geometry.yaml model_map_domain ('Model wind maps' crop)",
+      "projectionRefLat": 19.95,
+      "homeView": "alenuihaha-3d",
+      "view3dAzDeg": 246,
+      "view3dNote": "3D views look into the trades: the camera sits WSW, looking ENE.",
+      "models": [
+        "rrfs",
+        "refs"
+      ],
+      "modelsNote": "HRRR does not reach Hawaiʻi.",
+      "zoneForecast": {
+        "product": "CWFHFO",
+        "zones": [
+          "PHZ121",
+          "PHZ123"
+        ]
+      },
+      "subareas": [
+        {
+          "id": "alenuihaha",
+          "view3d": "up",
+          "label": "Alenuihāhā Channel",
+          "zones": [
+            "PHZ121"
+          ],
+          "box": null,
+          "boxNote": "Use the channel frame (viewBox) and the PHZ121 outline in alenuihaha_wx config/marine_zones.geojson, not a lat/lon box.",
+          "mechanism": "Trade-wind inversion capping a terrain-accelerated gap flow (well established).",
+          "axis": {
+            "method": "throat",
+            "coastline": "Natural Earth 10 m land",
+            "window": [
+              -156.8,
+              19.8,
+              -155.3,
+              21.2
+            ],
+            "shoreSeeds": {
+              "right": [
+                -156.25,
+                20.75
+              ],
+              "left": [
+                -155.75,
+                20.05
+              ]
+            },
+            "shoreNames": {
+              "right": "Maui",
+              "left": "Hawaiʻi Island"
+            },
+            "throat": {
+              "right": [
+                20.6509,
+                -156.0484
+              ],
+              "left": [
+                20.2631,
+                -155.8672
+              ],
+              "widthKm": 46.85
+            },
+            "axisDeg": 66,
+            "downstreamBearingDeg": 246,
+            "downstreamNote": "Trades blow ENE→WSW through the channel. +along points to the SW exit, matching alenuihaha_wx ChannelFrame."
+          },
+          "viewBox": {
+            "alongKm": [
+              -50,
+              50
+            ],
+            "acrossKm": [
+              -25,
+              25
+            ]
+          },
+          "viewBoxSource": "rrfs_3d_explorer_prototype.html XMIN..XMAX / YMIN..YMAX",
+          "channelAnalysis": {
+            "barriers": [
+              {
+                "name": "Kohala",
+                "heightM": 1670,
+                "note": "summit ~1670 m (north side of the channel's Hawaiʻi Island shore)"
+              },
+              {
+                "name": "Haleakalā",
+                "heightM": 3055,
+                "note": "summit 3055 m (Maui, north side of the channel)"
+              }
+            ],
+            "pressurePairs": [],
+            "capDefault": {
+              "def": "detector",
+              "lapseKkm": 5,
+              "thetaOffsetK": 5,
+              "rhPct": 60,
+              "windowM": 500
+            },
+            "capNote": "Trade-wind inversion ~1.8-2.4 km (Cao et al. 2007; Yang et al. 2008). Hitzl et al. (2014) used the 305 K isentrope (≈ surface θ + 5 K) or the 60% RH surface; the detector here is the one checked against 28 Hilo soundings.",
+            "refs": "Hitzl, Chen & Van Nguyen 2014 (MWR 142); Smith & Grubišić 1993; Carlis et al. 2010; Yang et al. 2008"
+          }
+        }
+      ],
+      "stations": [
+        {
+          "id": "91285",
+          "label": "Hilo sounding (PHTO)",
+          "kind": "sounding",
+          "lat": 19.72,
+          "lon": -155.05,
+          "elevM": 10,
+          "source": "IEM RAOB network (PITO), approx",
+          "iemId": "PITO"
+        },
+        {
+          "id": "PHKM",
+          "label": "Kohala VAD (PHKM)",
+          "kind": "vad",
+          "lat": 20.12528,
+          "lon": -155.77777,
+          "elevM": 1208,
+          "source": "radar-explorer web/data/sites/BIGISLAND/site.json",
+          "caveat": "Beam blockage into the channel is unchecked. Verify it before using the VAD profile."
+        },
+        {
+          "id": "51000",
+          "label": "Buoy 51000 (NE)",
+          "kind": "buoy",
+          "lat": 23.528,
+          "lon": -153.792,
+          "source": "alenuihaha_wx pressure_wind_io.py"
+        },
+        {
+          "id": "51002",
+          "label": "Buoy 51002 (SW)",
+          "kind": "buoy",
+          "lat": 17.07,
+          "lon": -157.755,
+          "source": "alenuihaha_wx pressure_wind_io.py"
+        },
+        {
+          "id": "KWHH1",
+          "label": "Kawaihae (NOS)",
+          "kind": "coastal",
+          "lat": 20.037,
+          "lon": -155.829,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "South of the channel exit, in the lee of Kohala"
+        },
+        {
+          "id": "KLIH1",
+          "label": "Kahului Harbor (NOS)",
+          "kind": "coastal",
+          "lat": 20.895,
+          "lon": -156.477,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Maui north shore: upstream trades"
+        },
+        {
+          "id": "PHOG",
+          "label": "Kahului Airport",
+          "kind": "airport",
+          "lat": 20.8986,
+          "lon": -156.4305,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Maui north shore: upstream trades"
+        },
+        {
+          "id": "PHTO",
+          "label": "Hilo Airport",
+          "kind": "airport",
+          "lat": 19.7203,
+          "lon": -155.0485,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Windward Hawaiʻi Island"
+        },
+        {
+          "id": "PHKO",
+          "label": "Kona Airport",
+          "kind": "airport",
+          "lat": 19.7364,
+          "lon": -156.0489,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Leeward Hawaiʻi Island"
+        },
+        {
+          "id": "PHNY",
+          "label": "Lānaʻi Airport",
+          "kind": "airport",
+          "lat": 20.7856,
+          "lon": -156.9514,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Lānaʻi, west edge"
+        }
+      ]
+    },
+    {
+      "id": "salish-sea",
+      "label": "Salish Sea",
+      "enabled": true,
+      "tz": "America/Los_Angeles",
+      "bbox": {
+        "latMin": 46.8,
+        "latMax": 49.3,
+        "lonMin": -125.4,
+        "lonMax": -121.7
+      },
+      "bboxSource": "salish-sea-briefing src/harvest/model_wind.py:50 (HRRR crop). One domain for all of the inland waters plus the coastal approach.",
+      "projectionRefLat": 48.05,
+      "models": [
+        "hrrr",
+        "rrfs",
+        "refs"
+      ],
+      "modelsNote": "REFS here blends RRFS members with two HRRR members (current and 6 h old). Say so in the UI.",
+      "zoneForecast": {
+        "product": "CWFSEW",
+        "zones": [
+          "PZZ130",
+          "PZZ131",
+          "PZZ132",
+          "PZZ133",
+          "PZZ134",
+          "PZZ135",
+          "PZZ150",
+          "PZZ170"
+        ]
+      },
+      "domainPhenomena": "Examples that cross subarea borders, which is why this is one domain: the Puget Sound Convergence Zone (westerly flow splitting around the Olympics and converging over the Sound), Fraser River outflow through the northern waters into the Strait, and marine pushes down the Strait.",
+      "subareas": [
+        {
+          "id": "strait",
+          "label": "Strait of Juan de Fuca",
+          "zones": [
+            "PZZ130",
+            "PZZ131",
+            "PZZ132"
+          ],
+          "box": {
+            "latMin": 48.05,
+            "latMax": 48.55,
+            "lonMin": -124.75,
+            "lonMax": -122.7
+          },
+          "boxSource": "salish-sea-briefing config/sources.yaml lightning.areas.strait",
+          "mechanism": "UNCONFIRMED (brief 3.2). Probably driven by the pressure gradient (westerly inflow, easterly outflow) or diurnal forcing, not a trade-wind inversion. Label any detected cap as a 'capping stable layer'.",
+          "axis": {
+            "method": "throat",
+            "coastline": "Natural Earth 10 m land",
+            "window": [
+              -124.9,
+              47.9,
+              -123.25,
+              48.75
+            ],
+            "shoreSeeds": {
+              "right": [
+                -124.0,
+                48.0
+              ],
+              "left": [
+                -124.2,
+                48.65
+              ]
+            },
+            "shoreNames": {
+              "right": "Olympic Peninsula",
+              "left": "Vancouver Island"
+            },
+            "throat": {
+              "right": [
+                48.1649,
+                -123.7003
+              ],
+              "left": [
+                48.3143,
+                -123.6539
+              ],
+              "widthKm": 16.87
+            },
+            "axisDeg": 102,
+            "downstreamBearingDeg": 102,
+            "downstreamNote": "Unconfirmed. +along points inland (ESE), which matches westerly inflow. Winter easterly outflow runs the other way. Don't treat this sign as 'the' gap-wind direction until the mechanism has been researched.",
+            "crossCheck": {
+              "centerlineAxisDeg": [
+                98,
+                106
+              ],
+              "gshhsFullThroatAxisDeg": 103,
+              "gshhsFullThroatWidthKm": 16.36,
+              "note": "The centerline fit through crossing midpoints (along -65..+22 km) agrees within 1.4-4 deg, depending on the window's east edge and coastline source. The throat sits about 65 km in from the Cape Flattery entrance. The western strait is a nearly uniform corridor of about 22 km, and east of +10 km the strait widens to about 33 km."
+            }
+          },
+          "viewBox": {
+            "alongKm": [
+              -90,
+              65
+            ],
+            "acrossKm": [
+              -30,
+              30
+            ]
+          },
+          "viewBoxSource": "Provisional. Runs from open water west of the entrance to Smith Island, so both endpoints of the briefing's Strait pressure-gradient rule (46087 and Smith Island / PTWW1) are in view.",
+          "channelAnalysis": {
+            "barriers": [
+              {
+                "name": "Olympic Mountains",
+                "heightM": 1800,
+                "note": "typical crest ~1800 m (Mt Olympus 2432 m)"
+              },
+              {
+                "name": "southern Vancouver Island",
+                "heightM": 1000,
+                "note": "San Juan Ridge / Sooke Hills crest ~1000 m"
+              }
+            ],
+            "pressurePairs": [
+              {
+                "a": {
+                  "id": "46087",
+                  "label": "Neah Bay buoy",
+                  "lat": 48.494,
+                  "lon": -124.728
+                },
+                "b": {
+                  "id": "PTWW1",
+                  "label": "Port Townsend",
+                  "lat": 48.111,
+                  "lon": -122.76
+                },
+                "ktPerMb": 10,
+                "positive": "westerly",
+                "source": "Burch's rule as the Salish Sea briefing uses it (wind kt ≈ 10 × Δp mb)"
+              },
+              {
+                "a": {
+                  "id": "KUIL",
+                  "label": "Quillayute",
+                  "lat": 47.9375,
+                  "lon": -124.555
+                },
+                "b": {
+                  "id": "KBLI",
+                  "label": "Bellingham",
+                  "lat": 48.7928,
+                  "lon": -122.5375
+                },
+                "ktPerMb": 10,
+                "positive": "westerly",
+                "source": "NOAA PMEL-44 (Overland & Walter 1983), after R. Anderson (NWS): wind kt ≈ 10 × (Bellingham − Quillayute) mb"
+              }
+            ],
+            "capDefault": {
+              "def": "detector",
+              "lapseKkm": 5,
+              "thetaOffsetK": 4,
+              "rhPct": 60,
+              "windowM": 500
+            },
+            "capNote": "Easterly gap flow: a cool layer ~900 m deep thinning to < 300 m at the exit (Colle & Mass 2000). Westerlies are often well mixed, with no cap: Froude numbers are then undefined.",
+            "refs": "Overland & Walter 1981 (MWR 109); Colle & Mass 2000 (MWR 128); Mass, Warner & Steed 2014 (WAF 29); Gaberšek & Durran 2004/2006 (JAS)"
+          }
+        },
+        {
+          "id": "northern",
+          "label": "Northern Waters & San Juans",
+          "zones": [
+            "PZZ133"
+          ],
+          "box": {
+            "latMin": 48.35,
+            "latMax": 49.0,
+            "lonMin": -123.3,
+            "lonMax": -122.45
+          },
+          "boxSource": "salish-sea-briefing config/sources.yaml lightning.areas.northern",
+          "mechanism": "Not researched. Fraser River outflow (cold NE gap wind from the Fraser Valley) is the obvious candidate for an axis later.",
+          "axis": null
+        },
+        {
+          "id": "puget-sound",
+          "label": "Puget Sound & Admiralty Inlet",
+          "zones": [
+            "PZZ134",
+            "PZZ135"
+          ],
+          "box": {
+            "latMin": 47.05,
+            "latMax": 48.2,
+            "lonMin": -123.15,
+            "lonMax": -122.25
+          },
+          "boxSource": "salish-sea-briefing config/sources.yaml lightning.areas.puget_sound",
+          "mechanism": "No gap winds. Flow is channelled along the Sound (southerlies and northerlies), and the Convergence Zone forms over the central Sound.",
+          "axis": {
+            "method": "declared",
+            "origin": [
+              47.625,
+              -122.45
+            ],
+            "originNote": "Central Sound between Alki / West Point and Bainbridge (water; checked against NE 10 m land).",
+            "axisDeg": 0,
+            "downstreamBearingDeg": 0,
+            "downstreamNote": "+along points north, which is downstream for the usual southerlies. The sign is a convention.",
+            "crossCheck": {
+              "mainBasinBearingDeg": 181.4,
+              "admiraltyInletBearingDeg": 159,
+              "note": "The owner specified a general N-S axis (2026-09-27). Measured: the main basin from Point No Point (47.912, -122.527) to the Tacoma Narrows (47.27, -122.55) runs 181°, 71 km. Admiralty Inlet, from Point Wilson toward the central Sound, trends about 159°, so along-axis curtains there cut it slightly obliquely. The throat method doesn't apply because there is no single two-shore gap."
+            }
+          },
+          "viewBox": {
+            "alongKm": [
+              -65,
+              65
+            ],
+            "acrossKm": [
+              -55,
+              18
+            ]
+          },
+          "viewBoxSource": "Covers the subarea box: Admiralty Inlet (48.20 N) to the South Sound (47.05 N), and Hood Canal (123.15 W) to the east shore (122.25 W).",
+          "channelAnalysis": {
+            "barriers": [],
+            "pressurePairs": [
+              {
+                "a": {
+                  "id": "TCNW1",
+                  "label": "Tacoma",
+                  "lat": 47.267,
+                  "lon": -122.413
+                },
+                "b": {
+                  "id": "PTWW1",
+                  "label": "Port Townsend",
+                  "lat": 48.111,
+                  "lon": -122.76
+                },
+                "ktPerMb": 10,
+                "positive": "southerly",
+                "source": "Burch's own worked example, as the Salish Sea briefing uses it (PTWW1 − TCNW1 for northerlies)"
+              }
+            ],
+            "capDefault": {
+              "def": "pbl",
+              "lapseKkm": 5,
+              "thetaOffsetK": 4,
+              "rhPct": 60,
+              "windowM": 500
+            },
+            "capNote": "No gap flow: channelled along the Sound. The layer numbers here are for context only.",
+            "refs": "Overland & Walter 1983 (NOAA PMEL-44)"
+          }
+        }
+      ],
+      "stations": [
+        {
+          "id": "72797",
+          "label": "Quillayute sounding (UIL)",
+          "kind": "sounding",
+          "lat": 47.95,
+          "lon": -124.5,
+          "elevM": 56,
+          "source": "IEM RAOB network (KUIL), approx",
+          "iemId": "KUIL"
+        },
+        {
+          "id": "KLGX",
+          "label": "Langley Hill VAD (KLGX)",
+          "kind": "vad",
+          "lat": 47.11694,
+          "lon": -124.10667,
+          "elevM": 111,
+          "source": "radar-explorer web/data/sites/KLGX/site.json",
+          "caveat": "Beam blockage is unchecked."
+        },
+        {
+          "id": "KATX",
+          "label": "Camano Island VAD (KATX)",
+          "kind": "vad",
+          "lat": 48.19461,
+          "lon": -122.4957,
+          "elevM": 195,
+          "source": "radar-explorer web/data/sites/KATX/site.json",
+          "caveat": "Beam blockage is unchecked."
+        },
+        {
+          "id": "46087",
+          "label": "Neah Bay buoy (46087)",
+          "kind": "buoy",
+          "lat": 48.493,
+          "lon": -124.727,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "46267",
+          "label": "Angeles Point waves (46267)",
+          "kind": "buoy",
+          "lat": 48.171,
+          "lon": -123.6,
+          "source": "salish-sea-briefing config/sources.yaml",
+          "caveat": "Waves and water temperature only. No wind, no pressure."
+        },
+        {
+          "id": "PTAW1",
+          "label": "Ediz Hook / Port Angeles (PTAW1)",
+          "kind": "cman",
+          "lat": 48.125,
+          "lon": -123.441,
+          "source": "salish-sea-briefing config/sources.yaml",
+          "caveat": "Shore-mounted and terrain-shadowed from the west."
+        },
+        {
+          "id": "46088",
+          "label": "New Dungeness buoy (46088)",
+          "kind": "buoy",
+          "lat": 48.332,
+          "lon": -123.179,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "SISW1",
+          "label": "Smith Island (SISW1)",
+          "kind": "cman",
+          "lat": 48.321,
+          "lon": -122.831,
+          "source": "salish-sea-briefing config/sources.yaml",
+          "caveat": "No barometer."
+        },
+        {
+          "id": "PTWW1",
+          "label": "Port Townsend (PTWW1)",
+          "kind": "cman",
+          "lat": 48.111,
+          "lon": -122.76,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "FRDW1",
+          "label": "Friday Harbor (FRDW1)",
+          "kind": "cman",
+          "lat": 48.545,
+          "lon": -123.012,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "46118",
+          "label": "Bellingham Bay (46118)",
+          "kind": "buoy",
+          "lat": 48.724,
+          "lon": -122.576,
+          "source": "salish-sea-briefing config/sources.yaml",
+          "caveat": "Use for wind only. Its pressure is unreliable."
+        },
+        {
+          "id": "46303",
+          "label": "Southern Georgia Strait (46303)",
+          "kind": "buoy",
+          "lat": 49.02,
+          "lon": -123.43,
+          "source": "salish-sea-briefing config/sources.yaml (Environment Canada)"
+        },
+        {
+          "id": "46120",
+          "label": "Point Wells (46120)",
+          "kind": "buoy",
+          "lat": 47.761,
+          "lon": -122.397,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "WPOW1",
+          "label": "West Point (WPOW1)",
+          "kind": "cman",
+          "lat": 47.662,
+          "lon": -122.435,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "TCMW1",
+          "label": "Tacoma Met (TCMW1)",
+          "kind": "cman",
+          "lat": 47.276,
+          "lon": -122.418,
+          "source": "salish-sea-briefing config/sources.yaml",
+          "caveat": "Wind only, no barometer."
+        },
+        {
+          "id": "DESW1",
+          "label": "Destruction Island (DESW1)",
+          "kind": "cman",
+          "lat": 47.675,
+          "lon": -124.485,
+          "source": "salish-sea-briefing config/sources.yaml"
+        },
+        {
+          "id": "KCLM",
+          "label": "Port Angeles Airport",
+          "kind": "airport",
+          "lat": 48.1202,
+          "lon": -123.4997,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Strait, south shore"
+        },
+        {
+          "id": "CWLM",
+          "label": "Victoria Gonzales (EC)",
+          "kind": "coastal",
+          "lat": 48.4133,
+          "lon": -123.325,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Strait, north shore (Environment Canada)"
+        },
+        {
+          "id": "CYYJ",
+          "label": "Victoria Airport",
+          "kind": "airport",
+          "lat": 48.6469,
+          "lon": -123.4258,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Saanich Peninsula"
+        },
+        {
+          "id": "KNUW",
+          "label": "Whidbey Island NAS",
+          "kind": "airport",
+          "lat": 48.3518,
+          "lon": -122.6559,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "East end of the Strait"
+        },
+        {
+          "id": "KFHR",
+          "label": "Friday Harbor Airport",
+          "kind": "airport",
+          "lat": 48.522,
+          "lon": -123.0244,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "San Juan Islands"
+        },
+        {
+          "id": "KBLI",
+          "label": "Bellingham Airport",
+          "kind": "airport",
+          "lat": 48.7928,
+          "lon": -122.5375,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Bellingham Bay"
+        },
+        {
+          "id": "KUIL",
+          "label": "Quillayute Airport",
+          "kind": "airport",
+          "lat": 47.9375,
+          "lon": -124.555,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Outer coast"
+        },
+        {
+          "id": "KPAE",
+          "label": "Everett Paine Field",
+          "kind": "airport",
+          "lat": 47.9063,
+          "lon": -122.2816,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Possession Sound"
+        },
+        {
+          "id": "KTIW",
+          "label": "Tacoma Narrows Airport",
+          "kind": "airport",
+          "lat": 47.268,
+          "lon": -122.5781,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "The Narrows"
+        },
+        {
+          "id": "KOLM",
+          "label": "Olympia Airport",
+          "kind": "airport",
+          "lat": 46.9694,
+          "lon": -122.9025,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "South Sound"
+        },
+        {
+          "id": "46146",
+          "label": "Halibut Bank buoy (EC)",
+          "kind": "buoy",
+          "lat": 49.34,
+          "lon": -123.73,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Strait of Georgia"
+        },
+        {
+          "id": "CYVR",
+          "label": "Vancouver Airport",
+          "kind": "airport",
+          "lat": 49.1939,
+          "lon": -123.1844,
+          "source": "NWS API station metadata (api.weather.gov), 2026-09-27",
+          "note": "Fraser delta"
+        },
+        {
+          "id": "WQK",
+          "label": "Race Rocks (EC)",
+          "kind": "coastal",
+          "lat": 48.298,
+          "lon": -123.531,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Strait of Juan de Fuca's narrowest point, south of Victoria: the key Canadian Strait station (Mass et al. 2014)",
+          "obsSource": "eccc",
+          "mscId": "1016640"
+        },
+        {
+          "id": "WDR",
+          "label": "Discovery Island (EC)",
+          "kind": "coastal",
+          "lat": 48.425,
+          "lon": -123.226,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "East end of the Strait, off Oak Bay",
+          "obsSource": "eccc",
+          "mscId": "1012475"
+        },
+        {
+          "id": "WZO",
+          "label": "Kelp Reefs (EC)",
+          "kind": "coastal",
+          "lat": 48.548,
+          "lon": -123.237,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Haro Strait",
+          "obsSource": "eccc",
+          "mscId": "1013998"
+        },
+        {
+          "id": "WSP",
+          "label": "Sheringham Point (EC)",
+          "kind": "coastal",
+          "lat": 48.377,
+          "lon": -123.921,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "North shore of the western Strait",
+          "obsSource": "eccc",
+          "mscId": "1017254"
+        },
+        {
+          "id": "VTS",
+          "label": "Saturna (EC)",
+          "kind": "coastal",
+          "lat": 48.775,
+          "lon": -123.128,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Boundary Pass",
+          "obsSource": "eccc",
+          "mscId": "1017099"
+        },
+        {
+          "id": "WVF",
+          "label": "Sand Heads (EC)",
+          "kind": "coastal",
+          "lat": 49.106,
+          "lon": -123.303,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Fraser River mouth",
+          "obsSource": "eccc",
+          "mscId": "1107010"
+        },
+        {
+          "id": "WPF",
+          "label": "Esquimalt Harbour (EC)",
+          "kind": "coastal",
+          "lat": 48.432,
+          "lon": -123.439,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Esquimalt Harbour, west of Victoria",
+          "obsSource": "eccc",
+          "mscId": "1012710"
+        },
+        {
+          "id": "VICH",
+          "label": "Victoria Harbour (EC)",
+          "kind": "coastal",
+          "lat": 48.423,
+          "lon": -123.387,
+          "source": "Environment and Climate Change Canada, SWOB real-time observations (api.weather.gc.ca), 2026-09-27",
+          "note": "Victoria's Inner Harbour",
+          "obsSource": "eccc",
+          "mscId": "1018619"
+        }
+      ]
+    },
+    {
+      "id": "vancouver-island",
+      "label": "Vancouver Island",
+      "enabled": false,
+      "stub": "No discovery done (brief 3.3). Don't copy the Strait's axis, stations or mechanism. If this ends up covering the Island's east side (Strait of Georgia), consider extending the salish-sea region instead of adding another.",
+      "bbox": null,
+      "projectionRefLat": null,
+      "models": [],
+      "subareas": [],
+      "stations": []
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+ "region": "hawaii",
+ "terrain": {
+  "file": "terrain.i16.gz",
+  "mask": "land.u8.gz",
+  "coast": "coast.i16.gz",
+  "coastUnits": "10 m",
+  "coastBandKm": 2.0,
+  "units": "m",
+  "x0": -162.1916,
+  "y0": -149.2749,
+  "dxy": 0.5,
+  "nx": 650,
+  "ny": 598,
+  "max_m": 4175,
+  "min_m": -5844,
+  "land_frac": 0.1398,
+  "credit": "Terrain: AWS Terrain Tiles (Terrarium; SRTM, GMTED, ETOPO1 and others). Coastline: GSHHG (Wessel & Smith)."
+ },
+ "photo": {
+  "file": "photo.jpg",
+  "extent": [
+   -162.19164081262574,
+   -149.27490000000014,
+   162.19164081262872,
+   149.27489999999977
+  ],
+  "credit": "Sentinel-2 cloudless 2024 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2024), CC BY-NC-SA 4.0"
+ },
+ "lines": {
+  "file": "lines.json",
+  "credit": "Roads and waterways \u00a9 OpenStreetMap contributors (ODbL)"
+ },
+ "chart": {
+  "file": "chart.json",
+  "bands": [
+   "coastal",
+   "approach",
+   "harbour"
+  ],
+  "credit": "Chart data: NOAA ENC (ENC Direct to GIS), not for navigation"
+ },
+ "failed": {},
+ "fetch": {
+  "file": "fetch.u16.gz",
+  "units": "0.1 km",
+  "ndir": 16,
+  "dirs": "from-direction, 0 = north, clockwise",
+  "x0": -162.1916,
+  "y0": -149.2749,
+  "dxy": 1.0,
+  "nx": 325,
+  "ny": 299,
+  "openExtraKm": 300.0,
+  "capKm": 600.0,
+  "note": "open water beyond the grid: distance to the edge + openExtraKm, capped"
+ }
+}

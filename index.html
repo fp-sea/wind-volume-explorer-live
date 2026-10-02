@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wind Volume Explorer</title>
+  <script>
+  /* The saved theme, stamped on <html> before the stylesheet paints (no white flash for a
+     dark choice). One stored object, "prefs", as the sibling briefing pages use; no stored
+     theme means no attribute, and the page follows the OS setting. */
+  (function(){try{var p={};try{p=JSON.parse(localStorage.getItem('prefs')||'{}')||{};}catch(e){}
+    var t=p.theme||localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- IBM Plex spaces the ʻokina (U+02BB) wide, as a modifier letter: this one glyph comes from Noto Sans (the subset covers only it) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&text=%CA%BB&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20261002173952">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="scene"></div>
+
+  <header id="topbar">
+    <span class="title">Wind Volume Explorer</span>
+    <span class="where" id="where"></span>
+    <span class="where model-tag" id="model-tag" title="The model and run on screen"></span>
+    <span id="status">loading…</span>
+  </header>
+
+  <!-- The colour key, on the map so it's always in view (and in saved pictures via export.js). -->
+  <div id="legend" hidden><div class="lbl" id="legend-title"></div><canvas id="legend-bar" width="256" height="12"></canvas><div class="ticks" id="legend-ticks"></div></div>
+  <div id="keys2"></div>
+
+  <aside id="panel">
+    <div id="timebar" hidden>
+      <div class="lbl"><span>Forecast</span><b id="fhr-val" class="one"></b></div>
+      <div class="inline"><button class="btn mini" id="play" title="Play the forecast, blending smoothly between the hourly outputs">▶</button><button class="btn mini" id="now-btn" title="Jump to now">Now</button><input id="fhr" type="range" min="0" max="18" step="0.25" value="0">
+        <select id="play-rate" class="mini" title="Playback speed"><option value="0.25">¼ h/s</option><option value="0.5" selected>½ h/s</option><option value="1">1 h/s</option><option value="2">2 h/s</option></select>
+        <button class="btn mini" id="ui-fold" title="Fold the controls away, keeping this time bar (H)">⌄</button></div>
+    </div>
+    <h1>Wind Volume Explorer <span class="h1r"><a class="guide-link" href="guide.html" target="_blank" rel="noopener" title="How the explorer works: data, sources, calculations, features, tips and lessons">Guide ↗</a><button class="btn mini" id="theme-btn" title="Panel colours: Auto (follows your device), Light or Dark">Auto</button></span></h1>
+    <p class="sub">Modelled wind, capping layers and turbulence in 3D, straight from NOAA model output: RRFS for Hawaiʻi, HRRR and RRFS for the Salish Sea.</p>
+
+    <nav class="tabs" role="tablist" aria-label="Controls">
+      <button role="tab" data-tab="view" title="Region, view, preset, the loaded model, markers, places, tours and sharing">View</button>
+      <button role="tab" data-tab="data" title="Model run and its status, model and column, scene, land and water">Data</button>
+      <button role="tab" data-tab="wind" title="Slice, cross-section, wind symbols and particles">Wind</button>
+      <button role="tab" data-tab="sea" title="Sea state, fog and visibility, clouds, satellite, turbulence and the inversion">Sea &amp; weather</button>
+      <button role="tab" data-tab="passage" title="Plan a passage: waypoints, the fastest route through the forecast (wind, waves, currents), the best departure, or tidal planning weeks ahead">Passage</button>
+      <button role="tab" data-tab="channel" title="Gap-flow diagnostics for the channel (experimental)" hidden>Channel</button>
+    </nav>
+
+    <section class="tab" role="tabpanel" data-tab="view">
+    <div class="grp">
+      <h2>Where</h2>
+      <select id="region-select" title="Region: one model domain"></select>
+      <select id="view-select" title="Views: the whole domain, each subarea, and the curtain views of subareas with an axis. Keys 1–9 jump to the first nine in this list."></select>
+      <div class="lab-row">Preset</div>
+      <select id="preset-select" title="Presets: a question and the settings that answer it"></select> <button class="btn mini" id="preset-info" title="The preset guide: the question, what's on screen, how to read it, things to try, where it matters, limits">ⓘ</button>
+      <div class="note" id="preset-note"></div>
+
+      <div class="btnrow">
+        <button class="btn" id="view-home" title="The region's opening view">Home</button>
+        <button class="btn" id="view-top" title="The current subarea from above">Above</button>
+        <button class="btn" id="view-3d" title="The current subarea in 3D">3D</button>
+      </div>
+      <div class="note" id="sub-note"></div>
+      <div class="inline marks">
+        <label class="row" title="Areas of interest: subarea outlines, channel axes and their labels"><input id="show-subareas" type="checkbox" checked> Areas of interest</label>
+        <label class="row" title="Buoys, stations, soundings and radar (VAD) sites; off-scene ones as edge markers"><input id="show-stations" type="checkbox" checked> Stations</label>
+      </div>
+      <label class="row" title="The latest observed wind at buoys and coastal stations (NWS API): an orange barb, and a label with the observed speed and gust (orange) and, when the time on screen is within 45 minutes of the report, the model's (blue). Hover a label for direction and age. Refreshed every 10 minutes."><input id="show-obs" type="checkbox" checked> Observed wind at stations</label>
+      <div class="note obs-key"><span class="o">8 G14</span> observed · <span class="m">9 G12</span> model, shown when the time on screen is within 45 min of the report · ▲ land station</div>
+    </div>
+    <div class="grp" id="view-model-grp">
+      <h2>Loaded model</h2>
+      <div class="note" id="view-model">No model loaded yet.</div>
+    </div>
+
+
+    <div class="grp" id="places-grp" hidden>
+      <h2>Places</h2>
+      <label class="row" title="Named points and features on the water and coast; hover one for its notes"><input id="show-places" type="checkbox" checked> Show places</label>
+      <label class="row" id="route-row" hidden><input id="show-route" type="checkbox"> <span id="route-label">Expedition route (option)</span></label>
+      <div class="note" id="places-note"></div>
+    </div>
+
+    <div class="grp">
+      <h2>Map: land &amp; water</h2>
+      <h3>Land</h3>
+      <div class="inline">
+        <label class="row"><input id="show-terrain" type="checkbox" checked> Terrain</label>
+        <select id="terrain-relief" title="Terrain height exaggeration. 'Match' keeps ridges and model levels in step.">
+          <option value="1">relief 1× (natural)</option><option value="1.5">relief 1.5×</option>
+          <option value="2">relief 2×</option><option value="3">relief 3×</option>
+          <option value="match" selected>relief = vertical exaggeration (default)</option>
+        </select>
+      </div>
+      <div class="inline"><span class="lab">Ground</span>
+        <select id="ground-select" title="What the land looks like">
+          <option value="relief">shaded relief</option><option value="photo">satellite photo</option><option value="dark">plain dark</option>
+        </select>
+      </div>
+      <label class="row"><input id="show-lines" type="checkbox" checked> Roads &amp; waterways</label>
+      <div class="note" id="relief-note" hidden></div>
+      <div class="note" id="ground-note"></div>
+
+      <h3>Water</h3>
+      <div class="inline"><span class="lab">Surface</span>
+        <select id="water-select" title="What the water surface looks like (under the model and the chart)">
+          <option value="sea">plain sea</option><option value="photo">satellite photo</option><option value="dark">plain dark</option>
+        </select>
+      </div>
+      <label class="row" title="NOAA chart data over the water: depth shading and contours, traffic lanes and channels, buoys and lights, soundings when zoomed in (not for navigation)"><input id="show-chart" type="checkbox"> ⚓ Marine chart (NOAA)</label>
+      <div id="chart-box" class="subbox" hidden>
+        <div class="inline"><span class="lab">Style</span><select id="chart-style" title="Vector: depth shading and contours drawn here. NOAA chart: the chart in paper style (a stored copy, or live from NOAA; sharper as you zoom in). Chart 19320: the last paper edition of the Island of Hawaiʻi chart, in fathoms.">
+          <option value="vector">depth shading (vector)</option><option value="noaa">NOAA chart (paper style)</option><option value="c19320">Chart 19320, Island of Hawaiʻi (last edition)</option></select></div>
+        <label class="row" id="chart-live-row" title="Off: a copy stored with this site (no dependency on NOAA's server; dated in the note). On: straight from NOAA's Chart Display Service, the latest weekly data and finer detail when zoomed in close."><input id="chart-live" type="checkbox"> Live from NOAA (latest, finest zoom)</label>
+        <label class="row" title="Sounding depths as numbers when you're zoomed in close"><input id="chart-snd" type="checkbox"> Soundings when zoomed in</label>
+        <label class="row" title="The depth colour key (also in exports)"><input id="chart-key" type="checkbox"> Depth key</label>
+        <div class="slider">
+          <div class="lbl"><span>Chart opacity</span><b id="chart-op-val"></b></div>
+          <input id="chart-op" type="range" min="0.15" max="1" step="0.05" value="0.75">
+        </div>
+        <div class="inline"><span class="lab">Depths in</span><select id="depth-units"><option value="ft">feet</option><option value="m">metres</option></select></div>
+        <div id="depth-key" hidden></div>
+        <div class="note" id="chart-info"></div>
+      </div>
+    
+    </div>
+
+    <div class="grp">
+      <h2>Tour</h2>
+      <div class="btnrow">
+        <button class="btn" id="tour-add" title="Add the current camera as a stop">+ Stop</button>
+        <button class="btn" id="tour-play" disabled>▶ Play</button>
+        <button class="btn" id="tour-clear" disabled>Clear</button>
+      </div>
+      <div class="note" id="tour-count">No stops yet. Kept in this browser, per region.</div>
+    </div>
+
+    <div class="grp">
+      <h2>Share &amp; export</h2>
+      <div class="btnrow two">
+        <button class="btn" id="copy-link">Copy link</button>
+        <button class="btn" id="save-png">Save picture</button>
+      </div>
+      <div class="btnrow two">
+        <select id="export-what"><option value="orbit">Orbit</option><option value="tour">Tour</option></select>
+        <select id="export-format"><option value="mp4">MP4</option><option value="gif">GIF</option></select>
+      </div>
+      <button class="btn" id="export-go" style="width:100%">Record</button>
+      <div class="note" id="export-note"></div>
+    </div>
+
+    </section>
+
+    <section class="tab" role="tabpanel" data-tab="data">
+    <div class="grp">
+      <h2>Model run</h2>
+      <div class="inline"><span class="lab">Model</span><select id="model-select" title="Models for this region (HRRR, RRFS, …). Unavailable ones say why. Choose one, then Load"></select></div>
+      <div class="inline"><span class="lab">Run</span>
+        <select id="run-select" title="Which model run to show">
+          <option value="short">Newest complete run · 0–18 h (default)</option>
+          <option value="long">Newest long run · 0–48 h (all posted)</option>
+          <option value="partial">Newest run, still posting (hours so far)</option>
+        </select>
+      </div>
+      <label class="row" id="subh-row" title="The model's own 15-minute output of 10 m wind and gust (first 18 h). The 3D column stays hourly."><input id="subh" type="checkbox" checked> 15-minute surface wind &amp; gust</label>
+      <div class="btnrow two">
+        <button class="btn" id="model-load" title="Find the newest complete run and load it">Load</button>
+        <button class="btn" id="model-off" title="Remove the model layers" disabled>Clear</button>
+      </div>
+      <button class="btn" id="dl-run" disabled title="Download every hour of this run in the background (what the layers on screen need), so playback is smooth from the start. Click again to stop.">Download whole run</button>
+      <div class="note" id="model-state"><div id="model-run" class="oneline"></div><div id="model-act" class="oneline"></div><div id="model-notes"></div></div>
+    </div>
+    <div class="grp">
+      <h2>Settings</h2>
+      <h3>Model data</h3>
+      <div class="inline"><span class="lab">Column</span><select id="top-select" title="How high the loaded column goes. Higher = more to download."></select></div>
+      <div class="note" id="model-note"></div>
+
+      <h3>Scene</h3>
+      <div class="slider">
+        <div class="lbl"><span>Vertical exaggeration</span><b id="vex-val"></b></div>
+        <input id="vex" type="range" min="1" max="20" step="0.5" value="3">
+      </div>
+      <div class="inline"><span class="lab">Wind in</span><select id="units-select" title="Units for wind speeds in readouts and keys (the colours don't change; barbs are always knots)">
+        <option value="kt">knots (kt)</option><option value="mph">mph</option><option value="ms">m/s</option><option value="kmh">km/h</option></select></div>
+
+    </div>
+        <div class="grp">
+      <h2>Kept on this device</h2>
+      <label class="row" title="Model files never change once posted, so the first download of each (HRRR's Zarr tiles, the GRIB pieces of HRRR, RRFS, GFS and ECMWF, the wave model, SSCOFS's hours) is kept in this browser and read from there after that, across reloads and visits: the same run isn't downloaded twice. Kept for 3 days, at most ~1.5 GB (the oldest days go first). Nothing leaves your device; turning it off clears it"><input id="store-on" type="checkbox" checked> Keep downloaded model data on this device</label>
+      <div class="inline"><span class="note" id="store-info">…</span> <button class="btn mini" id="store-clear" title="Delete the kept model data now (it's downloaded again when needed)">Clear</button></div>
+    </div>
+</section>
+
+    <section class="tab" role="tabpanel" data-tab="wind">
+    <div class="grp">
+      <h2>Wind layers</h2>
+      <div class="needs-model" hidden>
+
+
+
+        <label class="row" title="Hide the slice, inversion sheet, turbulence dots and particles over land, clipped at the real (GSHHS) coastline. Cross-sections stay whole: the terrain under them matters. Model winds within about one grid cell (2.5–3 km) of the coast are partly land-influenced."><input id="water-only" type="checkbox" checked> Over water only</label>
+        <div class="layer"><label class="row"><input id="show-slice" type="checkbox" checked> Horizontal slice</label><input class="op" id="op-slice" type="range" min="0.1" max="1" step="0.05" value="0.85" title="Opacity"></div>
+        <div id="slice-box" class="subbox">
+          <div class="slider">
+            <div class="lbl"><span>Height</span>
+              <span class="seg"><button class="btn mini on" id="ref-agl" title="Height above the ground: follows the terrain">above ground</button><button class="btn mini" id="ref-msl" title="Height above sea level: a flat sheet">above sea level</button></span>
+            </div>
+            <input id="height" type="range" min="0" max="1000" step="1" value="0">
+            <div class="note" id="height-val"></div>
+          </div>
+          <div class="note" id="slice-why" hidden>Shown for the particles: they follow this height (the slice itself is off).</div>
+        </div>
+        <div class="layer"><label class="row"><input id="show-curtain" type="checkbox"> Cross-section</label><input class="op" id="op-curtain" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Opacity"></div>
+        <div id="slab-box" class="subbox" hidden>
+          <div class="note" id="slab-why" hidden>Shown for the particle slab: it sits on this section (the cross-section itself is off).</div>
+          <div class="inline"><span class="lab">Orientation</span><select id="slab-mode" title="Which way the cross-section runs"></select></div>
+          <div class="slider"><div class="lbl"><span>Position <kbd>[</kbd> <kbd>]</kbd></span><b id="slab-pos-val" class="one"></b></div>
+            <input id="slab-pos" type="range" min="-150" max="150" step="0.5" value="0" title="Slide the section sideways through the volume, like a CT scan"></div>
+          <div class="slider"><div class="lbl"><span>Turn</span><b id="slab-turn-val" class="one"></b></div>
+            <input id="slab-turn" type="range" min="-90" max="90" step="1" value="0" title="Rotate the section about its centre"></div>
+          <div class="btnrow">
+            <button class="btn mini" id="slab-prev" title="Back one step ([)">◀ step</button>
+            <button class="btn mini" id="slab-sweep" title="Sweep the section through the volume">▶ sweep</button>
+            <button class="btn mini" id="slab-next" title="Forward one step (])">step ▶</button>
+          </div>
+          <div class="btnrow two">
+            <button class="btn mini" id="slab-face" title="Point the camera straight at the section">Face it</button>
+            <button class="btn mini" id="slab-square" title="Back to straight along / across, centred">Square up</button>
+          </div>
+          <div class="note one" id="curtain-where"></div>
+        </div>
+        <div class="inline"><span class="lab">Colour by</span><select id="field-select" title="What colours the slice and the cross-section"></select></div>
+        <label class="row" title="Light smoothing of the slice colours (one 1-2-1 pass across neighbouring grid points). Off by default: it softens gust peaks and the sharp edges of a gap jet. The hover readout always shows the model's own values."><input id="smooth" type="checkbox"> Smooth slice colours</label>
+        <label class="row" title="With the slice at 10 m and Colour by wind speed: the colours shimmer up toward the model's gust in puff-shaped patches drifting with the wind. Shows where it's gusty and how strong the gusts get; the puffs' timing and shape are illustrative (the model gives gust strength, not individual gusts)."><input id="slice-gusty" type="checkbox"> Gustiness on the surface wind (animated)</label>
+        <div class="inline" title="Wind drawn on the slice and the cross-section. Barbs are in knots (half feather 5, feather 10, pennant 50) and lie flat, pointing into the wind. Streamlines follow the wind, with arrowheads downstream; on the cross-section they follow the flow in its plane (along-section wind and up/down)."><span class="lab">Wind as</span>
+          <label class="row"><input id="wind-barbs" type="checkbox"> Barbs</label><label class="row"><input id="wind-stream" type="checkbox"> Streamlines</label></div>
+        <div id="glyph-box" class="subbox" hidden>
+          <div class="slider"><div class="lbl"><span>Density</span><b id="glyph-density-val"></b></div>
+            <input id="glyph-density" type="range" min="0.5" max="3" step="0.25" value="1" title="More or fewer barbs and streamlines (the base spacing also follows the zoom)"></div>
+          <div class="slider"><div class="lbl"><span>Size</span><b id="glyph-size-val"></b></div>
+            <input id="glyph-size" type="range" min="0.5" max="2" step="0.1" value="1" title="Barb length and arrowhead size"></div>
+          <div class="slider"><div class="lbl"><span>Opacity</span></div>
+            <input id="glyph-opacity" type="range" min="0.2" max="1" step="0.05" value="0.9"></div>
+          <div class="inline"><span class="lab">Colour</span><select id="glyph-colour" title="Lines are drawn with a contrasting outline. Auto: dark on a colour fill, light on the bare scene.">
+            <option value="auto">auto (contrast)</option><option value="dark">dark</option><option value="light">light</option><option value="speed">by wind speed</option></select></div>
+        </div>
+        <div class="layer"><label class="row" title="The model's wind made visible: streaks drifting with it through the volume"><input id="show-particles" type="checkbox"> Particles</label><input class="op" id="op-particles" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Opacity"></div>
+        <div id="particle-box" class="subbox" hidden>
+          <div class="inline"><span class="lab">Where</span><select id="pt-range">
+            <option value="column">whole column</option><option value="low">lowest 2 km</option><option value="slice">at the slice height</option>
+            <option value="xslab">slab on the cross-section</option><option value="hslab">layer at the slice height</option></select></div>
+          <div class="slider" id="slab-width-row" title="Particles in 'slab around the cross-section' live in this slab and move freely in 3D">
+            <div class="lbl"><span>Slab width</span><b id="slab-width-val"></b></div>
+            <input id="slab-width" type="range" min="0.5" max="25" step="0.5" value="4"></div>
+          <div class="slider" id="slice-thick-row" title="Particles in 'layer around the slice height' live in this layer and move freely in 3D">
+            <div class="lbl"><span>Layer thickness</span><b id="slice-thick-val"></b></div>
+            <input id="slice-thick" type="range" min="25" max="1500" step="25" value="250"></div>
+          <div class="note" id="pt-where-note" hidden></div>
+          <div class="inline"><span class="lab">Colour</span><select id="pt-colour">
+            <option value="speed">by speed</option><option value="height">by height</option><option value="updown">up / down (w)</option><option value="rotation">rotation (vorticity)</option><option value="turbulence">turbulence proxy (Ri)</option></select></div>
+          <label class="row" title="On: particles anywhere in the column, wind interpolated between the model's levels. Off: only on the model's own levels (10–320 m above ground and each pressure level), nothing made up in between."><input id="pt-interp" type="checkbox" checked> Interpolate between heights</label>
+          <div class="inline"><label class="row" title="Particles rise and sink with the model's vertical velocity w"><input id="pt-vertical" type="checkbox" checked> Vertical motion</label>
+            <select id="pt-wboost" title="Extra boost for vertical motion (on top of the vertical exaggeration)"><option value="1">true</option><option value="3">×3</option><option value="10">×10</option></select></div>
+          <div class="slider"><div class="lbl"><span>Density</span><b id="pt-density-val"></b></div><input id="pt-density" type="range" min="0.3" max="6" step="0.1" value="1" title="More particles. Above ~3× the animation may slow on older machines and phones."></div>
+          <div class="inline"><span class="lab">Width</span><select id="pt-width" title="Streak width on screen. Wider reads better on a phone or over a pale slice; thinner is cleaner at high density.">
+            <option value="1.5">thin</option><option value="2.5" selected>normal</option><option value="3.5">bold</option><option value="5">extra bold</option></select></div>
+          <label class="row"><input id="pt-heads" type="checkbox"> Bright heads</label>
+          <label class="row" title="In the lowest layer (up to the model's mixed-layer depth), particles surge and lull around the mean wind in proportion to the model's gust factor: gusty areas pulse, steady ones flow smoothly. An illustration of where it's gusty, not individual gusts (those last seconds, far too short to see at this speed)."><input id="pt-gusty" type="checkbox"> Show gustiness</label>
+          <label class="row" id="pt-tke-row" title="HRRR only (Salish Sea): particles get small random nudges sized by the model's turbulent kinetic energy where they are, so turbulent air visibly churns and smooth air flows cleanly. Needs 'interpolate between heights' and particles through a layer (not pinned to the slice)."><input id="pt-tke" type="checkbox"> Turbulence jitter (model TKE)</label>
+          <div id="pt-key" class="note"></div>
+          <canvas id="pt-scale" title="A streak moving at 10 kt, at the scale of the view centre"></canvas>
+          <div id="pt-scale-note" class="note"></div>
+        </div>
+      </div>
+      <div class="note no-model">No model loaded yet: it loads on its own when the page opens, or use <b>Load</b> in the Data tab.</div>
+    </div>
+    </section>
+
+    <section class="tab" role="tabpanel" data-tab="sea">
+    <div class="grp needs-model" hidden>
+      <h2>Surface layers</h2>
+      <p class="note mix-note">Everything on the water's surface in one place: for the wind, the currents and the sea state, a colour fill and symbols (particles, streamlines, barbs or arrows), each with its switch, its choices and its opacity (the slider on the right). Fills stack. The same settings as the full controls in the Wind tab and below.</p>
+      <div id="mixer"></div></div>
+    <div class="grp">
+      <h2>Sea &amp; weather layers</h2>
+      <div class="needs-model" hidden>
+        <div class="layer"><label class="row" title="Chop from the model's wind and the fetch, swell from NOAA's wave model, and the NWS zone forecast to compare; click the water to open the true-scale surface inspector"><input id="show-sea" type="checkbox"> Sea state</label><input class="op" id="op-sea" type="range" min="0.1" max="1" step="0.05" value="0.85" title="Opacity"></div>
+        <div id="sea-box" class="subbox" hidden>
+          <label class="row" title="Off: sea state stays on for the hover readout, the NWS comparison and the surface viewer (click the water), without colouring the water, so the wind colours show"><input id="sea-fill" type="checkbox" checked> Colour the water by wave height</label>
+          <label class="row" title="The sea's texture: crests moving along the waves (their spacing and speed follow the period and direction, exaggerated so they read at map scale), bigger and whiter as the sea builds, whitecaps where it's rough. With the colour off they're drawn white over the map. Wind against current pulses orange (steep) or red (dangerous) where Current effects on waves is on"><input id="sea-crests" type="checkbox" checked> Moving waves (crests, whitecaps)</label>
+          <label class="row" title="Move the crests (off: a still picture, lighter on the computer)"><input id="sea-anim" type="checkbox" checked> Animate</label>
+          <div class="inline" title="Arrows every ~4 km along the direction the waves travel (the chop's, with the wind), longer and paler for bigger seas"><label class="row"><input id="sea-arrows" type="checkbox"> Direction arrows</label><input class="op" id="op-seaarrows" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Arrow opacity"></div>
+          <div class="inline"><span class="lab">Show</span><select id="sea-mode" title="Chop from the model's wind and the fetch; swell from NOAA's wave model; total combines them (√ of the sum of squares)">
+            <option value="total">total (chop + swell)</option><option value="chop">chop only</option><option value="swell">swell only</option></select></div>
+          <canvas id="sea-bar" width="256" height="10"></canvas><div class="ticks sea-ticks"><span style="left:0%">0</span><span style="left:25%">2.5</span><span style="left:50%">5</span><span style="left:75%">7.5</span><span style="left:100%">10+ ft</span></div>
+          <div class="inline"><span class="lab">Wind for</span><select id="sea-duration" title="How long the wind has blown steadily. Waves need time as well as distance to grow; over open water the time usually limits them.">
+            <option value="21600">6 hours</option><option value="43200" selected>12 hours</option><option value="86400">24 hours</option><option value="Infinity">unlimited (fetch only)</option></select></div>
+          <div class="note" id="sea-note"></div>
+          <div class="inline"><span class="lab">NWS zone</span><select id="sea-zone" title="Compare with the National Weather Service's coastal waters forecast for this marine zone, for the period covering the time on screen"></select></div>
+          <div id="sea-nws" class="note"></div></div>
+        <div class="layer" id="cur-layer" hidden><label class="row" title="NOAA tidal current predictions at its stations (live from NOAA CO-OPS): where the current sets and how fast, and where it runs against the wind"><input id="show-cur" type="checkbox"> Tidal currents</label></div>
+        <div id="cur-box" class="subbox" hidden>
+          <div class="inline" id="cur-src-row" title="Where the currents on the map come from. NOAA stations: tidal predictions at NOAA's stations, blended between them. SSCOFS: NOAA's Salish Sea forecast model (everywhere on the water, eddies and channels included), out to 48 h from its newest run; the stations beyond it"><span class="lab">Currents from</span><select id="cur-src"><option value="stations">NOAA stations</option><option value="sscofs" selected>SSCOFS model (stations beyond it)</option></select></div>
+          <div class="inline" title="The current everywhere on the water as a colour wash (blue under 1 kt through green and yellow to red over 4 kt): SSCOFS's own field, or blended between the stations (fading out ~5 km from one, never across land)"><label class="row"><input id="cur-fill" type="checkbox" checked> Colour fill (speed)</label><input class="op" id="op-cur" type="range" min="0.1" max="1" step="0.05" value="0.8" title="Colour fill opacity"></div>
+          <div class="inline" title="Arrows showing where the current sets and how fast: on a ~2.5 km grid over the water (from the same field as the colour fill), or one at each NOAA prediction station"><span class="lab">Arrows</span><select id="cur-arrows" class="mini"><option value="grid" selected>on a grid</option><option value="stations">at the stations</option><option value="none">none</option></select><input class="op" id="op-curarrows" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Arrow and station marker opacity"></div>
+          <div class="inline"><span class="lab">Arrow size</span><input id="cur-scale" type="range" min="0.5" max="3" step="0.1" value="1" title="Arrow and dot size"></div>
+          <div class="inline" title="Particles drifting with the current over the whole domain (sped up so it reads: about 2 kt crosses 8% of the view a second), coloured by speed like the key; placed and paced for the view. They follow the time smoothly and play with the forecast"><label class="row"><input id="cur-parts" type="checkbox" checked> Particles</label><input class="op" id="op-curparts" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Particle opacity"></div>
+          <div class="inline" title="Evenly spaced streamlines with arrowheads showing the current's paths, eddies included, coloured by speed; traced again once the view stops moving"><label class="row"><input id="cur-lines" type="checkbox"> Streamlines</label><input class="op" id="op-curlines" type="range" min="0.1" max="1" step="0.05" value="0.9" title="Streamline opacity"></div>
+          <div class="inline"><span class="lab">Density</span><input id="cur-density" type="range" min="0.25" max="3" step="0.25" value="1" title="How many particles (3,000 at 1×) and how close the streamlines are"><b id="cur-density-val" class="val">1×</b></div>
+          <div class="inline"><span class="lab">Flow speed</span><input id="cur-speed" type="range" min="0.25" max="4" step="0.25" value="1" title="How fast the particles move on screen (the speed-up; faster currents always move faster)"><b id="cur-speed-val" class="val">1×</b></div>
+          <div class="inline" title="Where NOAA's prediction stations are: small rings, or dots coloured by the station's own current (click any for its current graph)"><span class="lab">Stations</span><select id="cur-marks" class="mini"><option value="rings" selected>rings</option><option value="dots">coloured dots</option><option value="none">not shown</option></select></div>
+          <label class="row" title="Names and speeds of NOAA's harmonic (primary) prediction stations, thinned so they don't overlap. Click any station for its current graph"><input id="cur-names" type="checkbox"> Label primary stations</label>
+          <label class="row" title="Ring the stations where the current runs against the wind and makes the chop steep (amber) or dangerous (red)"><input id="cur-flag" type="checkbox" checked> Flag wind against current</label>
+          <label class="row" title="Let the current change the waves: steeper and higher against it, longer and lower with it, and the wind over the moving water. Applies to the sea state colours, the hover readout and the surface viewer (where the boat also drifts with the current)"><input id="cur-waves" type="checkbox" checked> Current effects on waves</label>
+          <div class="cur-key"><span style="--c:#5aa9e6">&lt;1</span><span style="--c:#3fc1a5">1–2</span><span style="--c:#f2d04b">2–3</span><span style="--c:#f29a3b">3–4</span><span style="--c:#e0473c">4+ kt</span><span class="ring amber">steep</span><span class="ring red">dangerous</span></div>
+          <div class="note" id="cur-note"></div></div>
+        <div class="layer"><label class="row" title="The model's surface visibility: fog and mist as a soft layer near the surface, and a map of how far you'd see"><input id="show-fog" type="checkbox"> Fog &amp; visibility</label><input class="op" id="op-fog" type="range" min="0.1" max="1" step="0.05" value="0.8" title="Opacity"></div>
+        <div id="fog-box" class="subbox" hidden>
+          <div class="inline"><span class="lab">Show</span><select id="fog-mode" title="Fog and mist as a soft 3D layer, a flat map of visibility classes, or both">
+            <option value="both">fog layer + visibility map</option><option value="fog">fog layer only</option><option value="map">visibility map only</option></select></div>
+          <div class="vis-key" id="vis-key"></div>
+          <div class="note" id="fog-note"></div></div>
+        <div class="layer"><label class="row" title="GOES-West satellite imagery (NASA GIBS), to check the model's clouds against the real sky"><input id="show-sat" type="checkbox"> Satellite (GOES-West)</label><input class="op" id="op-sat" type="range" min="0.1" max="1" step="0.05" value="0.75" title="Opacity"></div>
+        <div id="sat-box" class="subbox" hidden>
+          <select id="sat-product"><option value="geocolor">GeoColor (true colour by day, infrared at night)</option><option value="ir">Clean infrared (clouds, day and night)</option><option value="vis">Visible (daytime only)</option></select>
+          <div class="note" id="sat-note"></div></div>
+        <div class="layer"><label class="row" title="The model's own cloud water and ice, as translucent volumes to 8 km"><input id="show-clouds" type="checkbox"> Clouds</label><input class="op" id="op-clouds" type="range" min="0.1" max="1" step="0.05" value="0.8" title="Opacity"></div>
+        <div id="cloud-box" class="subbox" hidden><div class="note" id="cloud-note"></div></div>
+        <div class="layer"><label class="row" title="Where the model's wind and temperature profiles point to turbulence (proxies: the model output has no turbulence field)"><input id="show-turb" type="checkbox"> Turbulence (proxies)</label><input class="op" id="op-turb" type="range" min="0.1" max="1" step="0.05" value="0.8" title="Opacity"></div>
+        <div id="turb-box" class="subbox" hidden>
+          <div class="inline"><label class="row" title="Where the Richardson number says turbulence is likely (red) or possible (amber), up to 6 km"><input id="turb-pockets" type="checkbox" checked> Turbulence pockets (Ri)</label>
+            <select id="turb-style" title="Dots at each layer, or soft fog volumes: the same data"><option value="dots">as dots</option><option value="fog">as soft fog</option></select></div>
+          <label class="row" title="The model's boundary-layer (PBL) top: the turbulent mixed layer next to the ground"><input id="turb-pbl" type="checkbox" checked> Mixed-layer top (PBL)</label>
+          <div class="note" id="turb-note"></div>
+        </div>
+        <div class="layer"><label class="row" title="The capping inversion found in each model column: a band from its base to its top, coloured by strength (TII)"><input id="show-inversion" type="checkbox"> <span id="inversion-label">Inversion</span></label><input class="op" id="op-inversion" type="range" min="0.1" max="1" step="0.05" value="0.5" title="Opacity"></div>
+        <div id="inversion-box" class="subbox" hidden>
+          <div id="inversion-key"><canvas id="tii-bar" width="256" height="8"></canvas><div class="ticks"><span style="left:0%">TII 0</span><span style="left:15%">weak</span><span style="left:30%">3</span><span style="left:45%">moderate</span><span style="left:60%">6</span><span style="left:80%">strong</span><span style="left:100%">10</span></div></div>
+          <div class="note" id="inversion-note"></div>
+        </div>
+      </div>
+      <div class="note no-model">No model loaded yet: it loads on its own when the page opens, or use <b>Load</b> in the Data tab.</div>
+    </div>
+    </section>
+
+    <section class="tab" role="tabpanel" data-tab="passage">
+    <div class="grp">
+      <h2>Passage planner <button class="btn mini ps-reset" id="ps-reset" title="Put every planner setting back to its default (boat limits, motoring, currents, wind source, horizon, times). The waypoints and the loaded wind are kept">Reset to defaults</button></h2>
+      <div class="inline"><span class="lab">Plan with</span><select id="ps-mode" title="The forecast: sail the loaded model run (wind, gusts, waves, currents), step by step. Currents only: ignore the wind and plan by the tidal currents at a steady speed through the water, for any date the predictions cover (weeks ahead)">
+        <option value="forecast">the forecast (wind, waves, currents)</option><option value="tide">currents only (plan ahead)</option></select></div>
+      <div class="ps-quick" title="A common passage: from, (optionally) via, and to; sets the waypoints">
+        <div class="inline"><span class="lab">From</span><select id="ps-from-pl"></select></div>
+        <div class="inline"><span class="lab">Via</span><select id="ps-via-pl"></select></div>
+        <div class="inline"><span class="lab">To</span><select id="ps-to-pl"></select></div>
+        <button class="btn mini" id="ps-quick-go" title="Set the waypoints for this passage">Set waypoints</button></div>
+      <div class="ps-wps">
+        <button class="btn" id="ps-pick" title="Then click the water on the map: the start, any points to pass, and the end">Add waypoints on the map</button>
+        <button class="btn mini" id="ps-undo" title="Remove the last waypoint">Undo</button><button class="btn mini" id="ps-clear" title="Remove all waypoints and the route">Clear</button>
+        <button class="btn mini" id="ps-rev" title="Reverse the waypoints: the trip back">Reverse</button><button class="btn mini" id="ps-order" title="Put the waypoints between the start and the end in the order with the shortest way by water (start and end stay put)">Best order</button>
+        <ol id="ps-list"></ol>
+        <div class="inline"><span class="lab">Round within</span><input id="ps-gate" type="range" min="0" max="1" step="0.05" value="0.2" title="Intermediate waypoints count as passed anywhere within this distance (0: touch the exact point). The start and end are always exact"><span class="val" id="ps-gate-l"></span></div>
+        <label class="row" title="After each route, route it again with the wind, boat speed, currents and departure changed (the sensitivity) in the background, using only the forecast already loaded; the results appear under the route and in the report when done. Changing the route stops it. The PDF always runs it in full"><input id="ps-autosens" type="checkbox" checked> Sensitivity automatically (in the background)</label>
+        <label class="row" title="After each route, the weather along it from the same model: air temperature and dewpoint, visibility (fog), rain (the model's radar echo and rain rate), cloud cover and ceiling, lightning. In the table, the conditions box, the route report (summary, cautions, charts, hour by hour) and the surface viewer's sky. Salish Sea: HRRR (a few MB, once, shared with the viewer); Hawaiʻi: RRFS (~0.5 MB an hour); past the run, GFS every 3 hours"><input id="ps-wx" type="checkbox" checked> Weather along the route</label>
+      </div>
+      <div id="ps-forecast">
+        <div class="ps-wind"><h3>Wind from</h3>
+          <div class="ps-loaded" id="ps-loaded" title="The run loaded in the explorer (choose another in the Data tab)"></div>
+          <select id="ps-wsrc" title="Which forecast the router sails in">
+            <option value="run">the loaded run only</option>
+            <option value="stitch" selected>freshest first, then longer runs</option>
+            <option value="stitchg">freshest first, then the long-range model</option>
+            <option value="global">the long-range model only</option>
+            <option value="compare">compare models (a route with each)</option></select>
+          <div class="inline" id="ps-glob-row"><span class="lab">Long range</span><select id="ps-glob" title="The global model for the hours past the high-resolution runs (10 m wind, gust and direction only; ~25 km grid, so gap winds are smoothed)"><option value="gfs">GFS (NOAA, 0.25°)</option><option value="ifs">ECMWF IFS (0.25°)</option></select></div>
+          <div class="inline" id="ps-hz-row"><span class="lab">Plan up to</span><input id="ps-hz" type="range" min="24" max="240" step="12" value="96" title="How far ahead the router may go (hours from the loaded run's start)"><span class="val" id="ps-hz-l"></span></div>
+          <label class="row" id="ps-light-row" title="HRRR's newest run takes a few hours to reach the HRRR Zarr copy. Until then the planner reads it hour by hour from the full-country files (~110 MB for 18 hours). With this on, it routes on the newest run that is in the Zarr copy instead (~12 MB for every hour; usually an hour or two older). Off: always the loaded run"><input id="ps-light" type="checkbox"> Lighter HRRR download (the newest run in the Zarr copy)</label>
+          <div id="ps-cmp" hidden></div>
+          <div class="note" id="ps-wnote"></div></div>
+        <div class="inline"><span class="lab">Depart</span><input id="ps-dep" type="range" min="0" max="18" step="0.5" value="0" title="Departure time within the loaded run"><span id="ps-dep-l" class="val"></span></div>
+        <label class="row" title="Sail with the tidal currents (NOAA predictions): their set and drift, and the wind over the moving water"><input id="ps-cur" type="checkbox" checked> Currents</label>
+        <div class="inline" id="ps-cursrc-row" title="Where the currents come from. NOAA stations: the tidal predictions at NOAA's stations, blended between them (a year ahead, no wind or river effects). SSCOFS: NOAA's Salish Sea forecast model (the currents everywhere on the water, eddies and channels included, with the wind and rivers), out to 48 h from its newest run; the stations beyond that. The sensitivity also routes with the other one"><span class="lab">Currents from</span><select id="ps-cursrc" class="mini"><option value="stations">NOAA stations</option><option value="sscofs" selected>SSCOFS model (stations beyond it)</option></select></div>
+        <label class="row" title="Motor when the wind is too light to sail at a useful speed. Off: sail only (in a calm the route waits or fails)"><input id="ps-motor" type="checkbox"> Motor in light air</label>
+        <div class="ps-motor" hidden>
+          <div class="inline" title="The engine goes on when the boat can't sail this fast on any point of sail in the wind there (its best speed under sail, after the waves), and off again when it can. Boat speed, not wind speed"><span class="lab">Motor when sailing speed would be under</span><input id="ps-mbelow" type="range" min="1" max="5" step="0.5" value="3"><span class="val" id="ps-mbelow-l"></span></div>
+          </div>
+        <label class="row" title="In channels too narrow to sail or tack in (Agate Passage, Port Townsend Canal, Deception Pass, the Swinomish Channel, tight harbour entrances), motor through at the motoring speed, even with light-air motoring off"><input id="ps-narrow" type="checkbox" checked> Motor through narrow channels</label>
+        <div class="inline ps-narrow" title="Water narrower than this (from the charted shore) counts as a narrow channel"><span class="lab">narrower than</span><input id="ps-narrow-w" type="range" min="0.1" max="0.5" step="0.05" value="0.25"><span class="val" id="ps-narrow-w-l"></span></div>
+        <div class="inline" title="Your speed through the water under power (a little less in head seas): for light air and narrow channels"><span class="lab">Motoring speed</span><input id="ps-mkn" type="range" min="3" max="8" step="0.5" value="5.5"><span class="val" id="ps-mkn-l"></span></div>
+        <details class="ps-lim" open><summary>Limits</summary>
+          <div class="inline"><span class="lab">Max gust</span><input id="ps-gust" type="range" min="15" max="50" step="1" value="30"><span class="val" id="ps-gust-l"></span></div>
+          <div class="inline"><span class="lab">Max seas</span><input id="ps-hs" type="range" min="2" max="16" step="0.5" value="8"><span class="val" id="ps-hs-l"></span></div>
+          <div class="inline"><span class="lab">Off land</span><input id="ps-offland" type="range" min="0" max="2" step="0.1" value="0.5"><span class="val" id="ps-offland-l"></span></div>
+          <label class="row" title="Don't route through spots where wind against current makes the chop dangerous (the red rings)"><input id="ps-danger" type="checkbox" checked> Avoid dangerous wind-against-current</label>
+          <div class="inline"><span class="lab">Tack costs</span><input id="ps-tack" type="range" min="0" max="120" step="5" value="45"><span class="val" id="ps-tack-l"></span></div>
+          <div class="inline"><span class="lab">Time step</span><select id="ps-dt"><option value="5">5 min (finer, slower)</option><option value="10" selected>10 min</option><option value="15">15 min</option><option value="20">20 min (faster)</option></select></div>
+        </details>
+        <button class="btn" id="ps-go" title="The fastest route through the waypoints, leaving at this time">Route it</button>
+        <button class="btn" id="ps-best" title="Route every departure hour in the run and chart how long each takes">Best departure</button>
+      </div>
+      <div id="ps-tide" hidden>
+        <div class="inline"><span class="lab">From</span><input id="ps-from" type="datetime-local" title="Start of the departure window (local time of the region)"></div>
+        <div class="inline"><span class="lab">For</span><input id="ps-days" type="range" min="1" max="21" step="1" value="3"><span class="val" id="ps-days-l"></span></div>
+        <div class="inline"><span class="lab">Speed</span><input id="ps-kn" type="range" min="2" max="10" step="0.5" value="5"><span class="val" id="ps-kn-l"></span></div>
+        <div class="inline"><span class="lab">Also try</span><input id="ps-kns" type="text" value="3, 4, 5, 6" title="Other speeds through the water (kn) to compare: the best time to leave at each"></div>
+        <label class="row" title="Only departures between first light and dark (civil twilight)"><input id="ps-day" type="checkbox"> Daylight departures only</label>
+        <button class="btn" id="ps-tidego" title="Every departure in the window, every 30 minutes, at each speed: passage time against the tide">Find best departures</button>
+      </div>
+      <div class="note" id="ps-status"></div>
+      <canvas id="ps-chart" hidden></canvas>
+      <div id="ps-out"></div>
+    </div>
+    </section>
+    <section class="tab" role="tabpanel" data-tab="channel">
+    <details class="grp" id="ca" hidden>
+      <summary><h2>Channel analysis <span class="exp">experimental</span></h2></summary>
+      <p class="note">Gap-flow diagnostics from the research literature, computed from the model hour on screen. <a href="channel-analysis.html" target="_blank" rel="noopener">How this works ↗</a></p>
+      <div class="inline"><span class="lab">Channel</span><select id="ca-sub"></select></div>
+      <canvas id="ca-chart" class="ca-chart"></canvas>
+      <div class="note one" id="ca-hover"></div>
+      <div class="ca-h">Capping layer (the "D" in the Froude number)</div>
+      <select id="ca-def" title="How the capping stable layer is found. The table below shows all four side by side."></select>
+      <div class="slider" id="ca-lapse-row"><div class="lbl"><span>Detector threshold</span><b id="ca-lapse-val"></b></div>
+        <input id="ca-lapse" type="range" min="2" max="10" step="0.5" value="5" title="The layer grows while θ rises faster than this (default 5 K/km, as checked against Hilo soundings)"></div>
+      <div class="slider" id="ca-offset-row"><div class="lbl"><span>Isentrope: surface θ +</span><b id="ca-offset-val"></b></div>
+        <input id="ca-offset" type="range" min="2" max="10" step="0.5" value="5" title="The cap is where θ first reaches the surface value plus this (Hitzl et al. 2014: the 305 K isentrope, ≈ +5 K in July)"></div>
+      <div class="slider" id="ca-rh-row"><div class="lbl"><span>Humidity drop below</span><b id="ca-rh-val"></b></div>
+        <input id="ca-rh" type="range" min="35" max="85" step="5" value="60" title="The cap is where RH first falls below this, above a moist layer (Hitzl et al. 2014: 60%)"></div>
+      <div class="slider" id="ca-window-row"><div class="lbl"><span>Δθ window above the cap</span><b id="ca-window-val"></b></div>
+        <input id="ca-window" type="range" min="200" max="1000" step="50" value="500" title="Δθ = mean θ over this depth above the cap minus the mean θ below it"></div>
+      <button class="btn mini" id="ca-reset" title="The recommended settings for this channel">Reset to defaults</button>
+      <div id="ca-numbers"></div>
+    </details>
+
+    </section>
+
+
+    <div class="grp">
+      <button class="btn" id="ui-hide" title="Hide the controls (H)">Hide controls <kbd>H</kbd></button>
+    </div>
+  </aside>
+  <button class="btn" id="ui-show" hidden title="Show the controls (H)">☰ Controls</button>
+  <div id="hint">drag: rotate · right-drag / shift-drag: pan · wheel / pinch: zoom <span id="hover"></span></div>
+
+  <script type="module" src="app.js?v=20261002173952"></script>
+  <div id="cur-graph" hidden><div class="cg-head"><span id="cur-graph-h"></span><button class="btn mini" id="cur-graph-x" title="Close">✕</button></div>
+    <canvas id="cur-graph-c"></canvas><div class="note" id="cur-graph-n"></div></div>
+</body>
+</html>

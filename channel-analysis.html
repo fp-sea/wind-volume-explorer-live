@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Channel Analysis Guide</title>
+  <script>
+  (function(){try{var p={};try{p=JSON.parse(localStorage.getItem('prefs')||'{}')||{};}catch(e){}
+    var t=p.theme||localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&text=%CA%BB&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #EFF2F2; --panel: #FBFCFC; --ink: #132A32; --ink-soft: #4C626B; --sea: #0E7C8B; --strong: #0B3F4A;
+      --caution: #C15A2B; --grid: #D3DBDE; --code: #e6ecee;
+      --display: "Noto Sans", "Barlow Semi Condensed", sans-serif; --body: "Noto Sans", "IBM Plex Sans", system-ui, sans-serif; --mono: "Noto Sans", "IBM Plex Mono", ui-monospace, monospace;
+    }
+    :root[data-theme="dark"] { --paper: #0b1a20; --panel: #0f1e24; --ink: #d6e4e7; --ink-soft: #92abb2; --sea: #3db2c1; --strong: #bde6ec; --caution: #ec8a55; --grid: #2b424a; --code: #172a31; color-scheme: dark; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper: #0b1a20; --panel: #0f1e24; --ink: #d6e4e7; --ink-soft: #92abb2; --sea: #3db2c1; --strong: #bde6ec; --caution: #ec8a55; --grid: #2b424a; --code: #172a31; color-scheme: dark; } }
+    html { background: var(--paper); }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.6; }
+    main { max-width: 760px; margin: 0 auto; padding: 28px 16px 60px; }
+    h1 { font-family: var(--display); font-size: 30px; line-height: 1.15; color: var(--strong); margin: 8px 0 6px; }
+    h2 { font-family: var(--display); font-size: 21px; color: var(--strong); margin: 36px 0 8px; padding-top: 10px; border-top: 1px solid var(--grid); }
+    h3 { font-family: var(--display); font-size: 16.5px; color: var(--strong); margin: 22px 0 4px; }
+    p, li { max-width: 68ch; }
+    a { color: var(--sea); }
+    .lede { font-size: 17px; color: var(--ink-soft); }
+    .tag { font-family: var(--mono); font-size: 11px; color: var(--caution); border: 1px solid var(--caution); border-radius: 4px; padding: 0 5px; vertical-align: 3px; }
+    .back { font-family: var(--mono); font-size: 13px; }
+    .formula { font-family: var(--mono); font-size: 14px; background: var(--code); border-radius: 6px; padding: 8px 12px; display: block; overflow-x: auto; margin: 8px 0; }
+    .box { background: var(--panel); border: 1px solid var(--grid); border-radius: 10px; padding: 12px 16px; margin: 14px 0; }
+    .warn { border-left: 3px solid var(--caution); }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 10px 0; }
+    th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+    th { font-family: var(--display); font-weight: 600; color: var(--strong); }
+    .wrap { overflow-x: auto; }
+    .refs li { margin-bottom: 6px; font-size: 14.5px; }
+    code { font-family: var(--mono); font-size: 13.5px; background: var(--code); padding: 1px 4px; border-radius: 3px; }
+    nav.toc { font-size: 14.5px; }
+    nav.toc ol { padding-left: 20px; margin: 6px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="back"><a href="./">← Wind Volume Explorer</a> · <a href="guide.html">Full guide</a></p>
+  <h1>Channel analysis <span class="tag">experimental</span></h1>
+  <p class="lede">What the "Channel analysis" section computes, where each number comes from in the research literature, how to set the capping layer, and how far to trust it. It covers the ʻAlenuihāhā Channel, the Strait of Juan de Fuca and, for context only, Puget Sound.</p>
+
+  <div class="box warn"><b>Experimental, and not for navigation.</b> Every number here is a diagnostic computed from one model hour, using methods from papers that studied these channels. They help you read the model; they are not observations and not a forecast of their own. Check them against the observed winds and pressures the explorer shows.</div>
+
+  <nav class="toc box"><b>Contents</b>
+    <ol>
+      <li><a href="#use">Using the section</a></li>
+      <li><a href="#charts">The four charts</a></li>
+      <li><a href="#numbers">The numbers, one by one</a></li>
+      <li><a href="#cap">The capping layer: definitions, sensitivity, defaults</a></li>
+      <li><a href="#colour">Colouring the map by Froude number</a></li>
+      <li><a href="#limits">Limits</a></li>
+      <li><a href="#refs">References</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="use">1. Using the section</h2>
+  <p>Open <b>Channel analysis</b> in the control panel. It appears for regions with a channel that has an axis: the ʻAlenuihāhā Channel (axis 066°/246°), the Strait of Juan de Fuca (102°/282°) and Puget Sound (north–south). Choosing one of those views selects it; you can also pick it in the section.</p>
+  <p>Opened, the section asks the model for a little more data: temperature, humidity and wind up to about 4.5 km, plus sea-level pressure (one extra message per hour). Closed, it loads and draws nothing. Everything updates with the time on screen, including during playback, about twice a second.</p>
+  <p>Its settings are part of the page link (<code>ca=</code>), so a shared link opens the same channel, definition and sliders.</p>
+
+  <h2 id="charts">2. The four charts</h2>
+  <p>Four small charts share one horizontal axis: distance along the channel's centre line, <b>upstream on the left</b>. Which end is upstream is decided every hour from the model's own 10 m wind along the axis. The end labels give the compass direction and the total length.</p>
+  <ul>
+    <li><b>10 m wind</b>: the wind you'd feel on the water, in your chosen units (the 15-minute data when that's on).</li>
+    <li><b>Sea-level pressure</b> (mb): the push along the channel. Wind accelerates from high toward low.</li>
+    <li><b>Cap depth</b> (m above the surface): how deep the layer under the capping stable layer is. The bold line is the definition you've chosen; the thin grey lines are the other three (the sensitivity band, see <a href="#cap">section 4</a>).</li>
+    <li><b>Froude number</b>: the dashed line is Fr = 1, and the shaded band above it is supercritical. The bold and thin lines work as in the cap chart.</li>
+  </ul>
+  <p>Hover the charts for the values at that point; an orange marker shows the spot on the map.</p>
+
+  <h2 id="numbers">3. The numbers, one by one</h2>
+
+  <h3>Flow direction, speed-up</h3>
+  <p><b>Upstream wind</b> is the mean 10 m wind over the first 15% of the axis on the upstream side. <b>Fastest</b> is the strongest 10 m wind further along. <b>Speed-up</b> is their ratio.</p>
+  <p>For reference: in the ʻAlenuihāhā on typical 7–8 m/s trades, winds are 1–2 m/s faster at the entrance and about 5 m/s faster at the exit below 1.5 km, roughly ×1.6 (Hitzl et al. 2014). In the Strait during easterly gap flow, winds went from 7 to 14 m/s at the eastern entrance and reached about 25 m/s at the western exit (Colle &amp; Mass 2000).</p>
+
+  <h3>Along-channel pressure difference and Bernoulli</h3>
+  <p><b>Δp</b> is the model's sea-level pressure at the upstream end minus that at the fastest point. Air moving down a pressure gradient with nothing slowing it would reach:</p>
+  <span class="formula">u = √( u₀² + 2 Δp / ρ )     ρ = 1.22 kg/m³, Δp in Pa</span>
+  <p>That is an upper bound: Overland &amp; Walter (1981) found the along-strait pressure gradient alone explains Juan de Fuca gap-wind speeds, and Mass et al. (1995) showed friction and inertia hold real winds below it. The second number keeps 55% of the kinetic-energy gain, which is what Lackmann &amp; Overland (1989) observed in Shelikof Strait, Alaska. That factor is a reasonable default, not a Strait of Juan de Fuca measurement.</p>
+  <p>The estimate is flagged <span style="color:var(--caution)">unreliable</span> when the air at the fastest point is warmer than upstream (2 m temperature, 0.5 K margin). Gaberšek &amp; Durran (2004) showed this simple Bernoulli balance fails when air descending from above warms the exit.</p>
+  <p>For reference, a 2011 ship crossing of the ʻAlenuihāhā measured about a 1.4 mb drop through the channel (Hitzl 2013). Colle &amp; Mass (2000) found their model underestimated the along-strait pressure difference by about 30%, so modelled exit winds were 2–5 m/s too weak. Keep that in mind when the model's Δp looks small.</p>
+
+  <h3>The 10 kt per mb rule (Salish Sea)</h3>
+  <p>A forecasters' rule for the inland waters: <b>wind (kt) ≈ 10 × pressure difference (mb)</b> between two stations along the channel. The section computes it twice, once from the model's sea-level pressure at the station positions and once from the latest observed pressures (NWS API: sea-level pressure, or the barometric value it reports), so you can compare them.</p>
+  <div class="wrap"><table>
+    <tr><th>Channel</th><th>Pair</th><th>Source</th></tr>
+    <tr><td>Strait of Juan de Fuca</td><td>46087 (Neah Bay buoy) − PTWW1 (Port Townsend); + means westerly</td><td>D. Burch's rule, as the Salish Sea briefing uses it</td></tr>
+    <tr><td>Strait of Juan de Fuca</td><td>KUIL (Quillayute) − KBLI (Bellingham); + means westerly</td><td>NOAA PMEL-44 (Overland &amp; Walter 1983), after R. Anderson, NWS</td></tr>
+    <tr><td>Puget Sound</td><td>TCNW1 (Tacoma) − PTWW1 (Port Townsend); + means southerly</td><td>Burch's worked example (the briefing's pair)</td></tr>
+  </table></div>
+  <p>The rule is calibrated on its own station spacing and is a rough guide. There is no such rule for the ʻAlenuihāhā; use the Bernoulli numbers there.</p>
+
+  <h3>Two-layer Froude number and hydraulic jumps</h3>
+  <p>Treat the air under the cap as a layer of depth D sliding under lighter air above, and compare its speed with the speed of a wave on the top of that layer:</p>
+  <span class="formula">Fr = U / √( g · Δθ/θ̄ · D )</span>
+  <p>U is the mean wind below the cap, Δθ the potential-temperature step across the cap, and θ̄ the mean θ below it. <b>Fr &lt; 1</b> is subcritical: deep, slow flow that "feels" what's downstream. <b>Fr &gt; 1</b> is supercritical: the layer thins and speeds up, like water over a weir. Where Fr falls back from above 1 to below 1 along the flow there is a <b>hydraulic jump</b>, where the layer thickens and slows, often with rising air.</p>
+  <p>In the ʻAlenuihāhā, Hitzl et al. (2014) found Fr &lt; 1 upstream, Fr &gt; 1 in the exit region and Fr &lt; 1 downstream: a weak jump, strongest near Maui's south coast. The upstream wave speed was about 14.7 m/s (cap 2.2 km, Δθ ≈ 3 K), falling to 13.6 m/s mid-channel. The exit was supercritical where winds below 1.2 km exceeded that. In the Strait, easterly gap flow is a cool layer about 900 m deep that thins to under 300 m at the exit (Colle &amp; Mass 2000): hydraulic behaviour of the kind Jackson &amp; Steyn (1994) and Mayr et al. (2007) describe. Westerlies are often well mixed with no cap, and then the two-layer Froude number simply doesn't apply.</p>
+
+  <h3>Upstream regime per barrier</h3>
+  <p>For each mountain bordering the channel, a non-dimensional mountain height from the upstream columns:</p>
+  <span class="formula">ε = N h / U     N = √( g/θ̄ · Δθ/h ) over the lowest h metres</span>
+  <p>Following Gaberšek &amp; Durran (2004): small ε is <b>linear</b> (little effect on the gap); ε ≈ 1.5 is the <b>mountain-wave</b> case (strongest winds at the exit, with sinking air); ε ≈ 5 is <b>upstream blocking</b> (strongest winds at the entrance). The class boundaries used here (1 and 3) are ours, between their cases. The barrier heights are fixed and approximate:</p>
+  <ul>
+    <li>ʻAlenuihāhā: Kohala about 1670 m, Haleakalā 3055 m.</li>
+    <li>Strait: Olympic Mountains typical crest about 1800 m (Mt Olympus 2432 m), and southern Vancouver Island about 1000 m.</li>
+  </ul>
+  <p>Separately, a barrier <b>above the cap base</b> blocks the flow beneath the cap: the air has to go around it. In Hawaiʻi that applies to Haleakalā and Mauna Kea/Mauna Loa; Kohala and West Maui sit below a typical 2 km inversion, and air flows over them with a lee jump (Carlis et al. 2010; Yang et al. 2008).</p>
+
+  <h2 id="cap">4. The capping layer: definitions, sensitivity, defaults</h2>
+  <p>The Froude number depends a lot on what you call "the cap", and studies define it differently. The section computes <b>all four definitions at once</b>. Pick one to drive the charts and colouring; the others are drawn thin and listed in the sensitivity table.</p>
+  <div class="wrap"><table>
+    <tr><th>Definition</th><th>Cap depth D</th><th>Slider (default)</th><th>Turning the slider up…</th></tr>
+    <tr><td>Inversion detector</td><td>Base of the layer where θ rises faster than the threshold (the explorer's inversion detector, 950–600 mb band)</td><td>Threshold, K/km (5)</td><td>…finds fewer, sharper caps; weak caps drop out.</td></tr>
+    <tr><td>Isentrope</td><td>First height where θ ≥ surface θ + offset</td><td>Offset, K (+5 in Hawaiʻi, +4 in the Salish Sea)</td><td>…deepens D, which raises the wave speed and <i>lowers</i> Fr.</td></tr>
+    <tr><td>Humidity drop</td><td>First height above 200 m where RH falls below the threshold, above a moist layer</td><td>RH, % (60)</td><td>…makes the drop easier to meet, which usually lowers D and <i>raises</i> Fr.</td></tr>
+    <tr><td>Model boundary layer</td><td>The model's HPBL</td><td>none</td><td>n/a</td></tr>
+  </table></div>
+  <p>For all but the detector, <b>Δθ</b> is the mean θ over a window above the cap minus the mean θ below it. The window slider (500 m by default) sets it: a wider window usually gives a larger Δθ, a faster wave and a <i>lower</i> Fr. The detector uses its own Δθ, from the bottom to the top of the layer it finds.</p>
+  <p>Wherever a definition finds no cap, or Δθ is under 0.3 K or D under 100 m, Fr is left undefined rather than guessed.</p>
+
+  <h3>Reading the sensitivity table</h3>
+  <p>The table lists depth, Δθ and Fr at the fastest point for each definition (★ marks this channel's default). The advice under it says:</p>
+  <ul>
+    <li><b>Robust</b>: every definition that finds a cap puts the fastest point on the same side of Fr = 1. Trust the sub/supercritical call.</li>
+    <li><b>Uncertain</b>: they straddle Fr = 1. Don't lean on the call this hour; look at the regime line and the pressure numbers.</li>
+    <li><b>No cap</b>: the flow is well mixed. The two-layer Froude number doesn't apply.</li>
+  </ul>
+
+  <h3>Recommended defaults, and why</h3>
+  <ul>
+    <li><b>ʻAlenuihāhā: inversion detector, 5 K/km.</b> This is the detector checked against 28 Hilo balloon soundings: it agrees on whether there's an inversion 64% of the time, and its base runs about 200 m low. Cross-check with the isentrope at +5 K, which is about the 305 K surface Hitzl et al. (2014) used in July, and with RH 60%, their moisture definition. They found the inversion drops about 200–250 m through the exit on the isentrope but up to about 800 m on the 60% RH surface, so expect these two to differ. A typical trade-wind inversion base is 1.8–2.4 km (Cao et al. 2007: mean 2225 m at Hilo; Yang et al. 2008: about 2100 m on strong-trade days).</li>
+    <li><b>Strait of Juan de Fuca: inversion detector, 5 K/km</b> for easterly gap flow under a stable layer. If the detector finds nothing (common in westerlies), don't force a cap by lowering the threshold. A shallow cool layer may show on the isentrope (+4 K) or the model boundary layer instead; if not, the flow is mixed and the regime and pressure numbers are the useful ones.</li>
+    <li><b>Puget Sound: model boundary layer</b>, for context only. It isn't a gap flow.</li>
+  </ul>
+  <p><b>Reset to defaults</b> in the section restores these.</p>
+
+  <h2 id="colour">5. Colouring the map by Froude number</h2>
+  <p>In <b>Colour by</b>, "Froude number, two-layer (experimental)" colours the horizontal slice with each model column's Fr, using the cap definition and sliders from the section (even while it's closed). It's one value per column, so it looks the same at any slice height. The colour scale is blue below 1, grey at 1 and red above: red areas are supercritical, and a red-to-blue edge along the flow marks a jump. Holes are columns with no cap. It uses the nearer whole hour (it isn't blended between hours) and takes about half a second to compute for each new hour or setting, so playback pauses briefly at each hour while it's on.</p>
+
+  <h2 id="limits">6. Limits</h2>
+  <ul>
+    <li><b>Vertical resolution.</b> The model's pressure levels are 25 mb apart for RRFS Hawaiʻi and 50 mb in HRRR's default column (25 mb is an option under More settings), about 250–500 m near the surface. A 200 m dip in the inversion, like the one at the ʻAlenuihāhā exit, can be smoothed out.</li>
+    <li><b>Model pressure gradients</b> can be too weak (about 30% in Colle &amp; Mass 2000), and with them the modelled gap winds.</li>
+    <li><b>Surface winds</b>: the model's are at 10 m; buoy anemometers sit at about 4–5 m and coastal stations often 10–20 m or higher.</li>
+    <li><b>Idealised theory.</b> The two-layer and Bernoulli pictures idealise real flow. Mixing, friction and flow around the mountains all matter (Mayr et al. 2007; Gaberšek &amp; Durran 2006).</li>
+    <li><b>Reference numbers come from specific cases</b> (one July for the ʻAlenuihāhā model study; a few storms for the Strait). Treat them as orders of magnitude, not thresholds.</li>
+  </ul>
+
+  <h2 id="refs">7. References</h2>
+  <h3>ʻAlenuihāhā Channel and Hawaiʻi</h3>
+  <ol class="refs">
+    <li>Hitzl, D. E., Y.-L. Chen, and H. Van Nguyen, 2014: Numerical simulations and observations of airflow through the ʻAlenuihāhā Channel, Hawaii. <i>Mon. Wea. Rev.</i>, 142, 4696–4718. <a href="https://doi.org/10.1175/MWR-D-13-00312.1">doi:10.1175/MWR-D-13-00312.1</a>. Thesis version: <a href="https://scholarspace.manoa.hawaii.edu/items/2958cdd3-3175-49b2-9940-7af68b3d4949">ScholarSpace</a>.</li>
+    <li>Smith, R. B., and V. Grubišić, 1993: Aerial observations of Hawaii's wake. <i>J. Atmos. Sci.</i>, 50, 3728–3750.</li>
+    <li>Carlis, D. L., Y.-L. Chen, and V. R. Morris, 2010: Numerical simulations of island-scale airflow over Maui and the Maui vortex. <i>Mon. Wea. Rev.</i>, 138. <a href="https://doi.org/10.1175/2009MWR3236.1">doi:10.1175/2009MWR3236.1</a></li>
+    <li>Yang, Y., Y.-L. Chen, and F. M. Fujioka, 2008: Effects of trade-wind strength and direction on the leeside circulations and rainfall of the island of Hawaii. <i>Mon. Wea. Rev.</i>, 136, 4799–4818. <a href="https://doi.org/10.1175/2008MWR2365.1">doi:10.1175/2008MWR2365.1</a></li>
+    <li>Schär, C., and R. B. Smith, 1993: Shallow-water flow past isolated topography. Part I. <i>J. Atmos. Sci.</i>, 50, 1373–1400.</li>
+    <li>Chen, Y.-L., and J. Feng, 2001: Numerical simulations of airflow and cloud distributions over the windward side of the island of Hawaii. Part I. <i>Mon. Wea. Rev.</i>, 129, 1117–1134.</li>
+    <li>Cao, G., T. W. Giambelluca, D. E. Stevens, and T. A. Schroeder, 2007: Inversion variability in the Hawaiian trade wind regime. <i>J. Climate</i>, 20, 1145–1160. <a href="https://doi.org/10.1175/JCLI4033.1">doi:10.1175/JCLI4033.1</a></li>
+  </ol>
+  <h3>Strait of Juan de Fuca and gap flows</h3>
+  <ol class="refs">
+    <li>Reed, T. R., 1931: Gap winds of the Strait of Juan de Fuca. <i>Mon. Wea. Rev.</i>, 59, 373–376.</li>
+    <li>Overland, J. E., and B. A. Walter, 1981: Gap winds in the Strait of Juan de Fuca. <i>Mon. Wea. Rev.</i>, 109, 2221–2233.</li>
+    <li>Overland, J. E., and B. A. Walter, 1983: Marine weather of the inland waters of western Washington. NOAA Tech. Memo. ERL PMEL-44. <a href="https://www.pmel.noaa.gov/pubs/PDF/over595/over595.pdf">PDF</a></li>
+    <li>Colle, B. A., and C. F. Mass, 2000: High-resolution observations and numerical simulations of easterly gap flow through the Strait of Juan de Fuca on 9–10 December 1995. <i>Mon. Wea. Rev.</i>, 128, 2398–2422.</li>
+    <li>Mass, C. F., M. D. Warner, and R. Steed, 2014: Strong westerly wind events in the Strait of Juan de Fuca. <i>Wea. Forecasting</i>, 29, 445–465. <a href="https://doi.org/10.1175/WAF-D-13-00026.1">doi:10.1175/WAF-D-13-00026.1</a></li>
+    <li>Mass, C. F., S. Businger, M. D. Albright, and Z. A. Tucker, 1995: A windstorm in the lee of a gap in a coastal mountain barrier. <i>Mon. Wea. Rev.</i>, 123, 315–331.</li>
+    <li>Jackson, P. L., and D. G. Steyn, 1994: Gap winds in a fjord. Parts I–II. <i>Mon. Wea. Rev.</i>, 122, 2645–2676.</li>
+    <li>Gaberšek, S., and D. R. Durran, 2004: Gap flows through idealized topography. Part I. <i>J. Atmos. Sci.</i>, 61, 2846–2862. <a href="https://doi.org/10.1175/JAS-3340.1">doi:10.1175/JAS-3340.1</a>. Part II, 2006: 63, 2720–2739.</li>
+    <li>Pan, F., and R. B. Smith, 1999: Gap winds and wakes: SAR observations and numerical simulations. <i>J. Atmos. Sci.</i>, 56, 905–923.</li>
+    <li>Mayr, G. J., and coauthors, 2007: Gap flows: results from the Mesoscale Alpine Programme. <i>Quart. J. Roy. Meteor. Soc.</i>, 133, 881–896.</li>
+    <li>Lackmann, G. M., and J. E. Overland, 1989: Atmospheric structure and momentum balance during a gap-wind event in Shelikof Strait, Alaska. <i>Mon. Wea. Rev.</i>, 117, 1817–1833.</li>
+    <li>Sharp, J., and C. F. Mass, 2002, 2004: Columbia Gorge gap flow. <i>Bull. Amer. Meteor. Soc.</i>, 83, 1757–1762; <i>Wea. Forecasting</i>, 19, 970–992.</li>
+  </ol>
+  <p class="back"><a href="./">← Back to the explorer</a> · <a href="guide.html">Full guide →</a></p>
+</main>
+</body>
+</html>
