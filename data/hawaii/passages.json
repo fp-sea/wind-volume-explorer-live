@@ -1,0 +1,163 @@
+{
+ "note": "Quick-route places for the passage planner: harbours, marinas and anchorages (a point on the water at or off each), vias (a point to pass), and cuts (channels narrower than the 200 m routing mask, opened along these lines). Approximate positions: planning, not navigation. Hawaiʻi: the offshore waypoints (off Keāhole, Pūhili, Kawili Points and Cape Hanamanioa) and the Makalawena and Nishimura positions are from the owner's places (places.json). The Kīpahulu turnaround is the expedition route's (places.json): on the ʻUpolu–Kīpahulu throat line, 1 nm short of Maui.",
+ "places": [
+  {
+   "name": "Hilo Harbor",
+   "lat": 19.735,
+   "lon": -155.068
+  },
+  {
+   "name": "Honokōhau Small Boat Harbor",
+   "lat": 19.6681,
+   "lon": -156.0306
+  },
+  {
+   "name": "Hāna Bay",
+   "lat": 20.757,
+   "lon": -155.985
+  },
+  {
+   "name": "Kahului Harbor",
+   "lat": 20.898,
+   "lon": -156.472
+  },
+  {
+   "name": "Kailua-Kona (anchorage)",
+   "lat": 19.64,
+   "lon": -155.998
+  },
+  {
+   "name": "Kaunakakai (Molokaʻi)",
+   "lat": 21.083,
+   "lon": -157.026
+  },
+  {
+   "name": "Kawaihae Harbor",
+   "lat": 20.036,
+   "lon": -155.832
+  },
+  {
+   "name": "Keauhou Bay",
+   "lat": 19.563,
+   "lon": -155.965
+  },
+  {
+   "name": "La Pérouse Bay",
+   "lat": 20.6,
+   "lon": -156.42
+  },
+  {
+   "name": "Lahaina",
+   "lat": 20.871,
+   "lon": -156.679
+  },
+  {
+   "name": "Makalawena (anchorage)",
+   "lat": 19.7938,
+   "lon": -156.0312
+  },
+  {
+   "name": "Makena",
+   "lat": 20.63,
+   "lon": -156.445
+  },
+  {
+   "name": "Mala Wharf",
+   "lat": 20.886,
+   "lon": -156.686
+  },
+  {
+   "name": "Māhukona",
+   "lat": 20.182,
+   "lon": -155.9
+  },
+  {
+   "name": "Mānele Bay (Lānaʻi)",
+   "lat": 20.742,
+   "lon": -156.887
+  },
+  {
+   "name": "Māʻalaea Harbor",
+   "lat": 20.791,
+   "lon": -156.513
+  },
+  {
+   "name": "Nishimura Bay",
+   "lat": 20.1896,
+   "lon": -155.9038
+  },
+  {
+   "name": "Off Hāna (turning point)",
+   "lat": 20.762,
+   "lon": -155.94
+  },
+  {
+   "name": "Turnaround off Kīpahulu (expedition route)",
+   "lat": 20.63557,
+   "lon": -156.04124
+  }
+ ],
+ "vias": [
+  {
+   "name": "Kealaikahiki Channel",
+   "lat": 20.55,
+   "lon": -156.72
+  },
+  {
+   "name": "Off ʻUpolu Point",
+   "lat": 20.28,
+   "lon": -155.87
+  },
+  {
+   "name": "Pailolo Channel",
+   "lat": 21.0,
+   "lon": -156.8
+  },
+  {
+   "name": "ʻAlalākeiki Channel",
+   "lat": 20.6,
+   "lon": -156.55
+  },
+  {
+   "name": "ʻAlenuihāhā Channel (throat)",
+   "lat": 20.45,
+   "lon": -155.99
+  },
+  {
+   "name": "ʻAuʻau Channel",
+   "lat": 20.87,
+   "lon": -156.75
+  },
+  {
+   "name": "Off Hāna (turning point)",
+   "lat": 20.762,
+   "lon": -155.94
+  },
+  {
+   "name": "Off Keāhole Point",
+   "lat": 19.728,
+   "lon": -156.0973
+  },
+  {
+   "name": "Off Pūhili Point",
+   "lat": 19.701,
+   "lon": -156.0855
+  },
+  {
+   "name": "Off Kawili Point",
+   "lat": 19.7922,
+   "lon": -156.0532
+  },
+  {
+   "name": "Off Cape Hanamanioa",
+   "lat": 20.5756,
+   "lon": -156.4553
+  },
+  {
+   "name": "Turnaround off Kīpahulu (expedition route)",
+   "lat": 20.63557,
+   "lon": -156.04124
+  }
+ ],
+ "cuts": []
+}

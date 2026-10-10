@@ -1,0 +1,459 @@
+{
+ "source": "NOAA Chart Display Service (ENC, paper-chart symbols)",
+ "fetched": "2026-09-28",
+ "depthUnits": "ft",
+ "base": {
+  "file": "base.webp",
+  "bbox": {
+   "latMin": 46.8,
+   "latMax": 49.3,
+   "lonMin": -125.4,
+   "lonMax": -121.7
+  },
+  "w": 4096,
+  "h": 2768
+ },
+ "tileDeg": 0.5,
+ "tiles": [
+  {
+   "file": "t_0_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -125.4,
+    "latMax": 47.3,
+    "lonMax": -124.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_1_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -124.9,
+    "latMax": 47.3,
+    "lonMax": -124.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_2_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -124.4,
+    "latMax": 47.3,
+    "lonMax": -123.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_3_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -123.9,
+    "latMax": 47.3,
+    "lonMax": -123.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_4_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -123.4,
+    "latMax": 47.3,
+    "lonMax": -122.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_5_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -122.9,
+    "latMax": 47.3,
+    "lonMax": -122.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_6_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -122.4,
+    "latMax": 47.3,
+    "lonMax": -121.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_7_0.webp",
+   "bbox": {
+    "latMin": 46.8,
+    "lonMin": -121.9,
+    "latMax": 47.3,
+    "lonMax": -121.7
+   },
+   "w": 819,
+   "h": 2048
+  },
+  {
+   "file": "t_0_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -125.4,
+    "latMax": 47.8,
+    "lonMax": -124.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_1_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -124.9,
+    "latMax": 47.8,
+    "lonMax": -124.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_2_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -124.4,
+    "latMax": 47.8,
+    "lonMax": -123.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_3_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -123.9,
+    "latMax": 47.8,
+    "lonMax": -123.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_4_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -123.4,
+    "latMax": 47.8,
+    "lonMax": -122.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_5_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -122.9,
+    "latMax": 47.8,
+    "lonMax": -122.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_6_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -122.4,
+    "latMax": 47.8,
+    "lonMax": -121.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_7_1.webp",
+   "bbox": {
+    "latMin": 47.3,
+    "lonMin": -121.9,
+    "latMax": 47.8,
+    "lonMax": -121.7
+   },
+   "w": 819,
+   "h": 2048
+  },
+  {
+   "file": "t_0_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -125.4,
+    "latMax": 48.3,
+    "lonMax": -124.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_1_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -124.9,
+    "latMax": 48.3,
+    "lonMax": -124.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_2_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -124.4,
+    "latMax": 48.3,
+    "lonMax": -123.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_3_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -123.9,
+    "latMax": 48.3,
+    "lonMax": -123.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_4_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -123.4,
+    "latMax": 48.3,
+    "lonMax": -122.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_5_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -122.9,
+    "latMax": 48.3,
+    "lonMax": -122.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_6_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -122.4,
+    "latMax": 48.3,
+    "lonMax": -121.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_7_2.webp",
+   "bbox": {
+    "latMin": 47.8,
+    "lonMin": -121.9,
+    "latMax": 48.3,
+    "lonMax": -121.7
+   },
+   "w": 819,
+   "h": 2048
+  },
+  {
+   "file": "t_0_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -125.4,
+    "latMax": 48.8,
+    "lonMax": -124.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_1_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -124.9,
+    "latMax": 48.8,
+    "lonMax": -124.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_2_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -124.4,
+    "latMax": 48.8,
+    "lonMax": -123.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_3_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -123.9,
+    "latMax": 48.8,
+    "lonMax": -123.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_4_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -123.4,
+    "latMax": 48.8,
+    "lonMax": -122.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_5_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -122.9,
+    "latMax": 48.8,
+    "lonMax": -122.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_6_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -122.4,
+    "latMax": 48.8,
+    "lonMax": -121.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_7_3.webp",
+   "bbox": {
+    "latMin": 48.3,
+    "lonMin": -121.9,
+    "latMax": 48.8,
+    "lonMax": -121.7
+   },
+   "w": 819,
+   "h": 2048
+  },
+  {
+   "file": "t_0_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -125.4,
+    "latMax": 49.3,
+    "lonMax": -124.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_1_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -124.9,
+    "latMax": 49.3,
+    "lonMax": -124.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_2_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -124.4,
+    "latMax": 49.3,
+    "lonMax": -123.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_3_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -123.9,
+    "latMax": 49.3,
+    "lonMax": -123.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_4_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -123.4,
+    "latMax": 49.3,
+    "lonMax": -122.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_5_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -122.9,
+    "latMax": 49.3,
+    "lonMax": -122.4
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_6_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -122.4,
+    "latMax": 49.3,
+    "lonMax": -121.9
+   },
+   "w": 2048,
+   "h": 2048
+  },
+  {
+   "file": "t_7_4.webp",
+   "bbox": {
+    "latMin": 48.8,
+    "lonMin": -121.9,
+    "latMax": 49.3,
+    "lonMax": -121.7
+   },
+   "w": 819,
+   "h": 2048
+  }
+ ]
+}
